@@ -107,3 +107,80 @@ let e7 = If(Var "a", CstI 11, CstI 22);;
 let e7v = eval e7 env;;
 
 
+(* Excercise 1.2: (i) *)
+type aexpr = 
+  | CstI of int
+  | Var of string
+  | Add of aexpr * aexpr
+  | Mul of aexpr * aexpr
+  | Sub of aexpr * aexpr;;
+
+
+// (ii)
+let ae1 = Sub(Var "v", Add(Var "w", Var "z"));;
+let ae2 = Mul(CstI 2, Sub(Var "v", Add(Var "w", Var "z")));;
+let ae21 = Mul(CstI 2, ae1);;
+let ae3 = Add(Var "x", Add(Var "y", Add(Var "z", Var "v")));;
+let ae31 = Add(Add(Var "x", Var "y"), Add(Var "z", Var "v"));;
+let ae32 = Add(Add(Add(Var "x", Var "y"), Var "z"), Var "v");;
+
+(* (iii) *)
+let rec fmt aexpr : string = 
+    match aexpr with
+    | CstI i -> string i
+    | Var x -> x
+    | Add(e1, e2) -> "(" + fmt e1 + " + " + fmt e2 + ")"
+    | Mul(e1, e2) -> "(" + fmt e1 + " * " + fmt e2 + ")"
+    | Sub(e1, e2) -> "(" + fmt e1 + " - " + fmt e2 + ")";;
+
+
+let ae1f = fmt ae1;;
+let ae2f = fmt ae2;;
+let ae21f = fmt ae21;;
+let ae3f = fmt ae3;;
+let ae31f = fmt ae31;;
+let ae32f = fmt ae32;;
+
+(* (iv) *)
+
+let rec simplify aexpr : aexpr = 
+  match aexpr with
+  | CstI i -> CstI i
+  | Var x -> Var x
+  | Add(e1, e2) -> 
+    let i1 = simplify e1 in
+    let i2 = simplify e2 in
+      match (i1, i2) with
+      | (CstI 0, i2) -> simplify(i2)
+      | (i1, CstI 0) -> simplify(i1)
+      | (i1, i2) -> simplify(Add(i1, i2))
+  | Sub(e1, e2) ->
+    let i1 = simplify e1 in
+    let i2 = simplify e2 in
+      match (i1, i2) with
+      | (CstI 0, i2) -> simplify(i2)
+      | (i1, CstI 0) -> simplify(i1)
+      | (i1, i2) -> 
+        if i1 <> i2 then simplify(Sub(i1, i2))
+        else CstI 0
+  | Mul(e1, e2) ->
+    let i1 = simplify e1 in
+    let i2 = simplify e2 in
+      match (i1, i2) with
+      | (CstI 0, i2) -> CstI 0
+      | (i1, CstI 0) -> CstI 0
+      | (CstI 1, i2) -> simplify(i2)
+      | (i1, CstI 1) -> simplify(i1)
+      | (i1, i2) -> simplify(Mul(i1, i2));;
+
+let aes = Add(Var "x", CstI 0);;
+let aeSub = Sub(Var "x", Var "x");;
+let aeMul = Mul(Var "x", CstI 1);;
+
+
+
+let aes1 = simplify aes;;
+let aes2 = simplify aeSub;;
+  
+(* V *)
+
