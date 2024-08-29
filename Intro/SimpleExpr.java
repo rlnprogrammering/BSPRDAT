@@ -24,6 +24,11 @@ class CstI extends Expr {
   public String toString(){
     return "" + i;
   }
+  
+    @Override
+    public Expr simplify() {
+        return this; // Variables cannot be simplified further
+    }
 }
 
 class Var extends Expr { 
@@ -35,7 +40,12 @@ class Var extends Expr {
 
   public int eval(Map<String,Integer> env) {
     return env.get(name);
-  } 
+  }
+  
+  @Override
+  public Expr simplify() {
+      return this; // Variables cannot be simplified further
+  }
 
   public String toString(){
     return name;
@@ -62,22 +72,23 @@ class Prim extends Expr { //  We expect this to be Binop according to the task
       throw new RuntimeException("unknown primitive");
   }
   
+  @Override
   public Expr simplify() {
       if (oper.equals("+")) {
-        if (e1.toString() == "0") { return e2; }
-        if (e2.toString() == "0") { return e1; }
-        return new Add(e1,e2);
+        if (e1.toString().equals("0")) { return e2; }
+        if (e2.toString().equals("0")) { return e1; }
+        return new Add(e1.simplify(),e2.simplify());
       } else if (oper.equals("*")){
-        if (e1.toString() == "0") { return new CstI(0); }
-        if (e2.toString() == "0") { return new CstI(0); }
-        if (e1.toString() == "1") { return e2; }
-        if (e2.toString() == "1") { return e1; }
-        return new Mul(e1,e2);
+        if (e1.toString().equals("0")) { return new CstI(0); }
+        if (e2.toString().equals("0")) { return new CstI(0); }
+        if (e1.toString().equals("1")) { return e2; }
+        if (e2.toString().equals("1")) { return e1; }
+        return new Mul(e1.simplify(),e2.simplify());
       } else if (oper.equals("-")) {
-        if (e1.toString() == "0") { return e2; }
-        if (e2.toString() == "0") { return e1; }
-        if (e1.toString() == e2.toString()) { return new CstI(0); }
-        return new Sub(e1,e2);
+        if (e1.toString().equals("0")) { return e2; }
+        if (e2.toString().equals("0")) { return e1; }
+        if (e1.toString().equals(e2.toString())) { return new CstI(0); }
+        return new Sub(e1.simplify(),e2.simplify());
       } else {
         throw new RuntimeException("unknown primitive");
        }
@@ -107,11 +118,6 @@ class Mul extends Prim {
  }
 }
 
-
-
-
-
-
 public class SimpleExpr {
   public static void main(String[] args) {
     Expr e1 = new CstI(17);
@@ -129,18 +135,24 @@ public class SimpleExpr {
     System.out.println(e3.eval(env0));
 
     // Excercise 1.4 (i):
-    Expr e4 = new Add(new CstI(17), new Var("z"));
+    Expr e4 = new Add(new CstI(0), new Var("z"));
 
     // Excercise 1.4 (ii):
     Expr e5 = new Sub(new CstI(17), new Add(new CstI(12), new Var("x")));
     Expr e6 = new Mul(new CstI(17), new Var("z"));
-    Expr e7 = new Mul(new CstI(17), new Add(new CstI(32), new CstI(24)));
+    Expr e7 = new Mul(new CstI(17), new Sub(new CstI(32), new CstI(32)));
 
     System.out.println(e4.toString());
     System.out.println(e5.toString());
     System.out.println(e6.toString());
     System.out.println(e7.toString());
     
+    // Excercise 1.4 (iv):
+    Expr e8 = new Sub(new Var("z"), new Var("z"));
+    Expr e9 = new Mul(new Var("x"), new CstI(1));
     System.out.println(e4.simplify());
+    System.out.println(e7.simplify());
+    System.out.println(e8.simplify());
+    System.out.println(e9.simplify());
   }
 }
