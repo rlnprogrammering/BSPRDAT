@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 abstract class Expr { 
+  abstract public Expr simplify();
   abstract public int eval(Map<String,Integer> env);
 }
 
@@ -60,6 +61,27 @@ class Prim extends Expr { //  We expect this to be Binop according to the task
     else
       throw new RuntimeException("unknown primitive");
   }
+  
+  public Expr simplify() {
+      if (oper.equals("+")) {
+        if (e1.toString() == "0") { return e2; }
+        if (e2.toString() == "0") { return e1; }
+        return new Add(e1,e2);
+      } else if (oper.equals("*")){
+        if (e1.toString() == "0") { return new CstI(0); }
+        if (e2.toString() == "0") { return new CstI(0); }
+        if (e1.toString() == "1") { return e2; }
+        if (e2.toString() == "1") { return e1; }
+        return new Mul(e1,e2);
+      } else if (oper.equals("-")) {
+        if (e1.toString() == "0") { return e2; }
+        if (e2.toString() == "0") { return e1; }
+        if (e1.toString() == e2.toString()) { return new CstI(0); }
+        return new Sub(e1,e2);
+      } else {
+        throw new RuntimeException("unknown primitive");
+       }
+    }
 
 
  public String toString() {
@@ -118,5 +140,7 @@ public class SimpleExpr {
     System.out.println(e5.toString());
     System.out.println(e6.toString());
     System.out.println(e7.toString());
+    
+    System.out.println(e4.simplify());
   }
 }
