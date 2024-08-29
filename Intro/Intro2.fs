@@ -40,7 +40,8 @@ let e6 = Prim("min", CstI 5, CstI 4);;
 
 (* Evaluation within an environment *)
 
-let rec eval e (env : (string * int) list) : int =
+(* Excercise 1.1: (i), (ii) *)
+let rec evalOld e (env : (string * int) list) : int =
     match e with
     | CstI i            -> i
     | Var x             -> lookup env x 
@@ -60,6 +61,33 @@ let rec eval e (env : (string * int) list) : int =
       then eval e1 env
       else eval e2 env
     | Prim _            -> failwith "unknown primitive";;
+
+let e1v  = evalOld e1 env;;
+let e2v1 = evalOld e2 env;;
+let e2v2 = evalOld e2 [("a", 314)];;
+let e3v  = evalOld e3 env;;
+let e4v  = evalOld e4 env;;
+let e5v  = evalOld e5 env;;
+let e6v  = evalOld e6 env;;
+
+(* Excercise 1.1: (iii) *)
+
+let rec eval e (env : (string * int) list) : int =
+    match e with
+    | CstI i            -> i
+    | Var x             -> lookup env x 
+    | Prim(ope, e1, e2) -> 
+      let i1 = eval e1 env in
+      let i2 = eval e2 env in
+      match ope with
+      | "+" -> i1 + i2
+      | "-" -> i1 - i2
+      | "*" -> i1 * i2
+      | "==" -> if i1 = i2 then 1 else 0
+      | "max" -> if i1 > i2 then i1 else i2
+      | "min" -> if i1 < i2 then i1 else i2
+    | Prim _            -> failwith "unknown primitive";;
+
 
 let e1v  = eval e1 env;;
 let e2v1 = eval e2 env;;
