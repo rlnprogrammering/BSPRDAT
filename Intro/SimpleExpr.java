@@ -74,25 +74,25 @@ class Prim extends Expr { //  We expect this to be Binop according to the task
   
   @Override
   public Expr simplify() {
-      if (oper.equals("+")) {
-        if (e1.toString().equals("0")) { return e2; }
-        if (e2.toString().equals("0")) { return e1; }
-        return new Add(e1.simplify(),e2.simplify());
-      } else if (oper.equals("*")){
-        if (e1.toString().equals("0")) { return new CstI(0); }
-        if (e2.toString().equals("0")) { return new CstI(0); }
-        if (e1.toString().equals("1")) { return e2; }
-        if (e2.toString().equals("1")) { return e1; }
-        return new Mul(e1.simplify(),e2.simplify());
-      } else if (oper.equals("-")) {
-        if (e1.toString().equals("0")) { return e2; }
-        if (e2.toString().equals("0")) { return e1; }
-        if (e1.toString().equals(e2.toString())) { return new CstI(0); }
-        return new Sub(e1.simplify(),e2.simplify());
-      } else {
-        throw new RuntimeException("unknown primitive");
-       }
+    if (oper.equals("+")) {
+        if (e1.simplify().toString().equals("0")) { return e2.simplify(); }
+        if (e2.simplify().toString().equals("0")) { return e1.simplify(); }
+        return new Add(e1.simplify(), e2.simplify());
+    } else if (oper.equals("*")){
+      if (e1.simplify().toString().equals("0")) { return new CstI(0); }
+      if (e2.simplify().toString().equals("0")) { return new CstI(0); }
+      if (e1.simplify().toString().equals("1")) { return e2.simplify(); }
+      if (e2.simplify().toString().equals("1")) { return e1.simplify(); }
+      return new Mul(e1.simplify(), e2.simplify());
+    } else if (oper.equals("-")) {
+      if (e1.simplify().toString().equals("0")) { return e2.simplify(); }
+      if (e2.simplify().toString().equals("0")) { return e1.simplify(); }
+      if (e1.simplify().toString().equals(e2.toString())) { return new CstI(0); }
+      return new Sub(e1.simplify(), e2.simplify());
+    } else {
+      throw new RuntimeException("unknown primitive");
     }
+  }
 
 
  public String toString() {
@@ -142,17 +142,25 @@ public class SimpleExpr {
     Expr e6 = new Mul(new CstI(17), new Var("z"));
     Expr e7 = new Mul(new CstI(17), new Sub(new CstI(32), new CstI(32)));
 
-    System.out.println(e4.toString());
-    System.out.println(e5.toString());
-    System.out.println(e6.toString());
-    System.out.println(e7.toString());
+    System.out.println("e4 toString: " + e4.toString());
+    System.out.println("e5 toString: " + e5.toString());
+    System.out.println("e6 toString: " + e6.toString());
+    System.out.println("e7 toString: " + e7.toString());
     
     // Excercise 1.4 (iv):
     Expr e8 = new Sub(new Var("z"), new Var("z"));
     Expr e9 = new Mul(new Var("x"), new CstI(1));
-    System.out.println(e4.simplify());
-    System.out.println(e7.simplify());
-    System.out.println(e8.simplify());
-    System.out.println(e9.simplify());
+    Expr e10 = new Add(new Mul(new CstI(0), new Add(new CstI(5), new CstI(3))), new CstI(3)); // (0 * (5 + 3)) + 3
+    Expr e11 = new Sub(new Add(new Mul(new CstI(10), new CstI(1)), new CstI(5)), new CstI(15)); // ((10 * 1) + 5) - 15
+    Expr e12 = new Mul(new Add(new CstI(2), new Mul(new CstI(3), new CstI(1))), new CstI(4)); // (2 + (3 * 1)) * 4
+
+
+    System.out.println("Simplify e4: " + e4.simplify());
+    System.out.println("simplify e7: " + e7.simplify());
+    System.out.println("simplify e8: " + e8.simplify());
+    System.out.println("simplify e9: " + e9.simplify());
+    System.out.println("simplify e10: " + e10.simplify());
+    System.out.println("simplify e11: " + e11.simplify());
+    System.out.println("simplify e12: " + e12.simplify());
   }
 }
