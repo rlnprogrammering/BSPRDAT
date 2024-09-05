@@ -248,18 +248,43 @@ let rec minus (xs, ys) =
 
 (* Find all variables that occur free in expression e *)
 
+// let x1 = x1 + 7; // x1 is free
+// let x1 + 8; // x1 is bound
+
+// let x1 = x1 + 7 in x1 + 8 end // x1 is bound
+
 let rec freevars e : string list =
     match e with
     | CstI i -> []
     | Var x  -> [x]
-    | Let(x, erhs, ebody) -> 
-          union (freevars erhs, minus (freevars ebody, [x]))
+    | Let(bindings, ebody) ->
+          bindings |> List.rev |> List.fold (fun acc (name, expr) -> 
+          union (freevars expr, minus (acc, [name]))) []
     | Prim(ope, e1, e2) -> union (freevars e1, freevars e2);;
 
 (* Alternative definition of closed *)
 
 let closed2 e = (freevars e = []);;
 
+let a2 = Let ([("x1", CstI 17); ("x2", Var "y")], Prim("+", Var "x1", Prim("*", CstI 100, Var "x2")))
+
+let a3 = Let(
+    [
+        ("x1", Prim("+", CstI 5, CstI 7)); 
+        ("x2", Prim("*", Var "x1", CstI 2))
+    ], 
+    Prim("+", Var "x1", Var "x2"))
+
+let a4 = Let(
+    [
+        ("x1", Prim("+", Var "x1", CstI 7))
+    ],
+    Prim("+", Var "x1", CstI 8)
+)
+
+let free1 = freevars a2;;
+let free2 = freevars a3;;
+let free3 = freevars a4;;
 
 (* ---------------------------------------------------------------------- *)
 
