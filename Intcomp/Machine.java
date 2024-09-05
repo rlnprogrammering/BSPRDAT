@@ -38,26 +38,26 @@ class Machine {
     while (pc < code.length) 
       switch (instr = code[pc++]) {
       case SCST:
-	stack[sp+1] = code[pc++]; sp++; break;
+        stack[sp+1] = code[pc++]; sp++; break;
       case SVAR:
-	stack[sp+1] = stack[sp-code[pc++]]; sp++; break;
+	    stack[sp+1] = stack[sp-code[pc++]]; sp++; break;
       case SADD: 
-	stack[sp-1] = stack[sp-1] + stack[sp]; sp--; break;
+	    stack[sp-1] = stack[sp-1] + stack[sp]; sp--; break;
       case SSUB: 
-	stack[sp-1] = stack[sp-1] - stack[sp]; sp--; break;
+	    stack[sp-1] = stack[sp-1] - stack[sp]; sp--; break;
       case SMUL: 
-	stack[sp-1] = stack[sp-1] * stack[sp]; sp--; break;
+	    stack[sp-1] = stack[sp-1] * stack[sp]; sp--; break;
       case SPOP: 
-	sp--; break;
+	    sp--; break;
       case SSWAP: 
-	{ int tmp     = stack[sp]; 
-	  stack[sp]   = stack[sp-1]; 
-	  stack[sp-1] = tmp;
-	  break;
-	}
+	    { int tmp     = stack[sp]; 
+        stack[sp]   = stack[sp-1]; 
+        stack[sp-1] = tmp;
+        break;
+        }
       default:			
-	throw new RuntimeException("Illegal instruction " + instr 
-				   + " at address " + (pc-1));
+	    throw new RuntimeException("Illegal instruction " + instr 
+		   + " at address " + (pc-1));
       }
     return stack[sp];      
   }
