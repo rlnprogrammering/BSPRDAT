@@ -10,24 +10,38 @@ module Intcomp1
 type expr = 
   | CstI of int
   | Var of string
-  | Let of string * expr * expr
+  | Let of (string * expr) list * expr
   | Prim of string * expr * expr;;
 
+(* Example of what has to work *)
+
+// Let ([("x1", ...); ("x2", ...)], Prim("+", Var "x1", Var "x2"))
+
+let a1 = Let ([("x1", CstI 17); ("x2", CstI 22)], Prim("+", Var "x1", Prim("*", CstI 100, Var "x2")))
 (* Some closed expressions: *)
 
+// let z = 17 in z + z = 34
 let e1 = Let("z", CstI 17, Prim("+", Var "z", Var "z"));;
 
+// (let z = 17 in (let z = 22 in 100 * z) + z) = 2217
+// 100 * 22 + 17
 let e2 = Let("z", CstI 17, 
              Prim("+", Let("z", CstI 22, Prim("*", CstI 100, Var "z")),
                        Var "z"));;
 
+// let z = 5 - 4 in 100 * z = 100
+// 100 * 1
 let e3 = Let("z", Prim("-", CstI 5, CstI 4), 
              Prim("*", CstI 100, Var "z"));;
 
+// (20 + (let z = 17 in z +2) + 30) = 69
+// 20 + (17 + 2) + 30
 let e4 = Prim("+", Prim("+", CstI 20, Let("z", CstI 17, 
                                           Prim("+", Var "z", CstI 2))),
                    CstI 30);;
 
+// (2 * (let x = 3 in x + 4)) = 14
+// (2 * (3 + 4)) = 14
 let e5 = Prim("*", CstI 2, Let("x", CstI 3, Prim("+", Var "x", CstI 4)));;
 
 (* ---------------------------------------------------------------------- *)
@@ -43,17 +57,51 @@ let rec eval e (env : (string * int) list) : int =
     match e with
     | CstI i            -> i
     | Var x             -> lookup env x 
-    | Let(x, erhs, ebody) -> 
-      let xval = eval erhs env
-      let env1 = (x, xval) :: env 
-      eval ebody env1
+    | Let((bindings : (string * expr) list), (ebody : expr)) ->
+        let env1 = 
+            bindings |> List.fold (fun acc (name, expr) -> (name, eval expr acc) :: acc) env
+        eval ebody env1
     | Prim("+", e1, e2) -> eval e1 env + eval e2 env
     | Prim("*", e1, e2) -> eval e1 env * eval e2 env
     | Prim("-", e1, e2) -> eval e1 env - eval e2 env
     | Prim _            -> failwith "unknown primitive";;
 
+let a1 = Let ([("x1", CstI 17); ("x2", CstI 22)], 
+              Prim("+", Var "x1", 
+              Prim("*", CstI 100, Var "x2")))
+
 let run e = eval e [];;
 
+let r1 = run e1;;
+let r2 = run e2;;
+let r3 = run e3;;
+let r4 = run e4;;
+let r5 = run e5;;
+
+// exercise 2.1
+let r1 = run a1;;
+
+(* 
+- let r1 = run e1;;
+val r1: int = 34
+
+> let r2 = run e2;;
+val r2: int = 2217
+
+> let r3 = run e3;;
+val r3: int = 100
+
+> let r4 = run e4;;
+val r4: int = 69
+
+> let r5 = run e5;;
+val r5: int = 14
+*)
+
+(* ---------------------------------------------------------------------- *)
+
+(* Checking whether an expression is closed.  The vs is 
+   a list of the bound variables.  *)
 (* ---------------------------------------------------------------------- *)
 
 (* Closedness *)
