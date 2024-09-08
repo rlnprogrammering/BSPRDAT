@@ -4,14 +4,20 @@
 (* SCST = 0, SVAR = 1, SADD = 2, SSUB = 3, SMUL = 4, SPOP = 5, SSWAP = 6; *)
 let sinstrToInt = function
   | SCstI i -> [0;i]
-  | SVar i  -> failwith "Not implemented"
-  | SAdd    -> failwith "Not implemented"
-  | SSub    -> failwith "Not implemented"
-  | SMul    -> failwith "Not implemented"
-  | SPop    -> failwith "Not implemented"
-  | SSwap   -> failwith "Not implemented"
+  | SVar i  -> [1;i]
+  | SAdd    -> [2]
+  | SSub    -> [3]
+  | SMul    -> [4]
+  | SPop    -> [5]
+  | SSwap   -> [6]
 
-let assemble instrs = failwith "Not implemented"
+let assemble instrs = instrs |> List.fold (fun acc sinstr -> 
+    match sinstr with 
+    | 0 -> sinstr@acc
+    | 1 -> sinstr@acc
+    | _ -> sinstr::acc
+    ) 
+    []
 
 (* Output the integers in list inss to the text file called fname: *)
 
