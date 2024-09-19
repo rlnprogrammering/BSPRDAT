@@ -38,3 +38,5 @@ jobs:
         commit_message: "Add zipped assignment ${{ github.event.inputs.assignment_number }}"
         file_pattern: "${{ env.ZIP_NAME }}"
         push_options: "--force"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
