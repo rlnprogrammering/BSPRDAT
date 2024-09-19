@@ -168,7 +168,7 @@ let ex8 =
                           Letfun("powsum", "e",
                               If(Prim("=", Var "e", CstI 0),
                                     CstI 1,
-                                    Prim("+", Call(Var "pow", Var "e"), Call("powsum", Prim("-", Var "e", CstI 1)))),
-                              Call(Var "powsum", Var "count"))));;
+                                    Prim("+", Call(Var "pow", Var "e"), Call(Var "powsum", Prim("-", Var "e", CstI 1)))),
+                              Call(Var "powsum", CstI 11))));;
 
-let powsum n = eval ex6 [("count", Int n)];;
+let powsum = eval ex8 [];; // 3^11 + 3^10 + ... + 3^1 + 3^0 = 265720
