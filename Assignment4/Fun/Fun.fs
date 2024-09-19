@@ -173,19 +173,20 @@ let ex8 =
 
 let powsum = eval ex8 [];; // 3^11 + 3^10 + ... + 3^1 + 3^0 = 265720
 
-let ex_sum_of_powers = 
-  Let("n", CstI 3,  (* Example with n = 3 *)
-    Letfun("pow", "e",
+let e9 = 
+  Letfun("pow", "x", 
+    Letfun("pow_aux", "e",
       If(Prim("=", Var "e", CstI 0),
-        CstI 1,
-        Prim("*", Var "e", Prim("*", Var "e", Prim("*", Var "e", Prim("*", Var "e", Prim("*", Var "e", Prim("*", Var "e", Prim("*", Var "e", Var "e")))))))
+        CstI 1,  (* Base case: x^0 = 1 *)
+        Prim("*", Var "x", Call(Var "pow_aux", Prim("-", Var "e", CstI 1)))  (* Recursive case: x * pow(x, e-1) *)
       ),
-      Letfun("powsum", "e",
-        If(Prim("=", Var "e", CstI 0),
-          CstI 0,
-          Prim("+", Call(Var "pow", Var "e"), Call(Var "powsum", Prim("-", Var "e", CstI 1)))
-        ),
-        Call(Var "powsum", Var "n")
-      )
+      Call(Var "pow_aux", CstI 8)  (* Always raise to power 8 *)
+    ),
+    Letfun("powsum", "n",
+      If(Prim("=", Var "n", CstI 0),
+        CstI 0,  (* Base case: sum(0) = 0 *)
+        Prim("+", Call(Var "pow", Var "n"), Call(Var "powsum", Prim("-", Var "n", CstI 1)))  (* Recursive sum *)
+      ),
+      Let("n", CstI 3, Call(Var "powsum", Var "n"))  (* Start summing from n = 3 *)
     )
   )
