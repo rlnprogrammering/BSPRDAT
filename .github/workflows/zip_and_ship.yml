@@ -37,6 +37,6 @@ jobs:
         git config --local user.name "github-actions[bot]"
 
         # Add zip file to the repo
-        git add *.zip
+        git add -f *.zip
         git commit -m "Add zipped assignment ${number}"
         git push
