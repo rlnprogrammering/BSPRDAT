@@ -118,7 +118,7 @@ let ex1 = Letfun("f1", ["x"], Prim("+", Var "x", CstI 1),
 //                           Call(Var "fib", Prim("-", Var "n", CstI 2))),
 //                      CstI 1), Call(Var "fib", CstI 25)));;
 
-// (* Exercise 4.2 *)        
+(* Exercise 4.2.1 *)        
 // // let rec sum n =
 // //   match n with
 // //   | 1 -> 1
@@ -133,6 +133,7 @@ let ex1 = Letfun("f1", ["x"], Prim("+", Var "x", CstI 1),
 
 // let sum n = eval ex6 [("count", Int n)];;
 
+(* Exercise 4.2.2 *)
 // // let rec pow n e =
 // //   match e with
 // //   | 0 -> 1
@@ -149,7 +150,7 @@ let ex1 = Letfun("f1", ["x"], Prim("+", Var "x", CstI 1),
 //                       Prim("*", Var "n", Call(Var "pow", Prim("-", Var "e", CstI 1))))),
 //           Call(Var "pow", CstI 8)));;
 
-
+(* Exercise 4.2.3 *)
 // // let rec pow n e =
 // //   match e with
 // //   | 0 -> 1
@@ -177,6 +178,7 @@ let ex1 = Letfun("f1", ["x"], Prim("+", Var "x", CstI 1),
 
 // let powsum = eval ex8 [];; // 3^11 + 3^10 + ... + 3^1 + 3^0 = 265720
 
+(* Exercise 4.2.4 *)
 // let ex9 = 
 //   Letfun("pow", "x", 
 //     Letfun("pow_aux", "e",
