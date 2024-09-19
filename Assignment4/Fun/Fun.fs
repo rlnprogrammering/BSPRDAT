@@ -157,3 +157,18 @@ let ex7 =
 //   | 0 -> 1
 //   | _ -> (pow n e) + (powsum n (e-1));;
 
+let ex8 = 
+  Let("n", CstI 3,
+    Letfun("pow", "e",
+          If(Prim("=", Var "e", CstI 0),
+                CstI 1,
+                If(Prim("=", Var "e", CstI 1),
+                      Var "n",
+                      Prim("*", Var "n", Call(Var "pow", Prim("-", Var "e", CstI 1))))),
+                          Letfun("powsum", "e",
+                              If(Prim("=", Var "e", CstI 0),
+                                    CstI 1,
+                                    Prim("+", Call(Var "pow", Var "e"), Call("powsum", Prim("-", Var "e", CstI 1)))),
+                              Call(Var "powsum", Var "count"))));;
+
+let powsum n = eval ex6 [("count", Int n)];;
