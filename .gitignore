@@ -35,6 +35,7 @@ bin
 *.nar
 *.ear
 *.zip
+!BPRD-*-NataliePetersen-RasmusNielsen-FrederikRosenlund.zip
 *.tar.gz
 *.rar
 
