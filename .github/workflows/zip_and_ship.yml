@@ -9,6 +9,9 @@ on:
         required: true
         default: '1'
 
+permissions:
+  contents: write
+
 jobs:
   zip-assignment:
     runs-on: ubuntu-latest
