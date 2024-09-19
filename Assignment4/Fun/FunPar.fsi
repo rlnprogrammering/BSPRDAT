@@ -24,6 +24,8 @@ type token =
   | NOT
   | THEN
   | TRUE
+  | AND
+  | OR
   | CSTBOOL of (bool)
   | NAME of (string)
   | CSTINT of (int)
@@ -51,6 +53,8 @@ type tokenId =
     | TOKEN_NOT
     | TOKEN_THEN
     | TOKEN_TRUE
+    | TOKEN_AND
+    | TOKEN_OR
     | TOKEN_CSTBOOL
     | TOKEN_NAME
     | TOKEN_CSTINT

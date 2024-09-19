@@ -212,3 +212,14 @@ let ex10 =
                                     CstI 1,
                                     Prim("+", Call(Var "pow", [Var "e"; Var "n"]), Call(Var "powsum", [Prim("-", Var "e", CstI 1); Var "n"]))),
                               Call(Var "powsum", [CstI 11; CstI 3])));;
+
+
+(* Exercise 4.5 *)
+let e11 = eval (fromString "true && false") [];;
+let e12 = eval (fromString "true && true") [];; 
+let e13 = eval (fromString "true || true") [];;
+let e14 = eval (fromString "true || false") [];;
+let e15 = eval (fromString "false || false") [];;
+let e16 = eval (fromString "false || true") [];;
+let e17 = eval (fromString "false && true") [];;
+let e18 = eval (fromString "false && false") [];;
