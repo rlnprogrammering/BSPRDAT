@@ -172,3 +172,20 @@ let ex8 =
                               Call(Var "powsum", CstI 11))));;
 
 let powsum = eval ex8 [];; // 3^11 + 3^10 + ... + 3^1 + 3^0 = 265720
+
+let ex_sum_of_powers = 
+  Let("n", CstI 3,  (* Example with n = 3 *)
+    Letfun("pow", "e",
+      If(Prim("=", Var "e", CstI 0),
+        CstI 1,
+        Prim("*", Var "e", Prim("*", Var "e", Prim("*", Var "e", Prim("*", Var "e", Prim("*", Var "e", Prim("*", Var "e", Prim("*", Var "e", Var "e")))))))
+      ),
+      Letfun("powsum", "e",
+        If(Prim("=", Var "e", CstI 0),
+          CstI 0,
+          Prim("+", Call(Var "pow", Var "e"), Call(Var "powsum", Prim("-", Var "e", CstI 1)))
+        ),
+        Call(Var "powsum", Var "n")
+      )
+    )
+  )
