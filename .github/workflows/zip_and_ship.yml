@@ -30,13 +30,9 @@ jobs:
         # Zip the assignment folder
         zip -r "$zip_name" "Assignment${number}"
 
-    # Step 3: Push the zip file to the repository
     - name: Push zipped file to repository
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-
-        # Add zip file to the repo
-        git add -f *.zip
-        git commit -m "Add zipped assignment ${number}"
-        git push
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "Add zipped assignment ${number}"
+        push_options: "--force"
+        file_pattern: "*.zip"
