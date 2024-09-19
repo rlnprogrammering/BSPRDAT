@@ -113,4 +113,47 @@ let ex5 =
                           Call(Var "fib", Prim("-", Var "n", CstI 1)),
                           Call(Var "fib", Prim("-", Var "n", CstI 2))),
                      CstI 1), Call(Var "fib", CstI 25)));;
-                     
+
+(* Exercise 4.2 *)        
+// let rec sum n =
+//   match n with
+//   | 1 -> 1
+//   | _ -> n + (sum (n-1));;
+
+let ex6 = 
+    Letfun("sum", "n",
+          If(Prim("=", Var "n", CstI 1),
+                CstI 1,
+                Prim("+", Var "n", Call(Var "sum", Prim("-", Var "n", CstI 1)))),
+          Call(Var "sum", Var "count"));;
+
+let sum n = eval ex6 [("count", Int n)];;
+
+// let rec pow n e =
+//   match e with
+//   | 0 -> 1
+//   | 1 -> n
+//   | _ -> n * (pow n (e-1));;
+
+let ex7 = 
+  Let("n", CstI 3,
+    Letfun("pow", "e",
+          If(Prim("=", Var "e", CstI 0),
+                CstI 1,
+                If(Prim("=", Var "e", CstI 1),
+                      Var "n",
+                      Prim("*", Var "n", Call(Var "pow", Prim("-", Var "e", CstI 1))))),
+          Call(Var "pow", CstI 8)));;
+
+
+// let rec pow n e =
+//   match e with
+//   | 0 -> 1
+//   | 1 -> n
+//   | _ -> n * (pow n (e-1));;
+
+// let rec powsum n e =
+//   match e with
+//   | 0 -> 1
+//   | _ -> (pow n e) + (powsum n (e-1));;
+
