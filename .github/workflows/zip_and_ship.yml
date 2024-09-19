@@ -44,7 +44,7 @@ jobs:
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: "Add zipped assignment ${{ github.event.inputs.assignment_number }}"
-        file_pattern: "${{ env.ZIP_NAME }}"
+        file_pattern: "Zipped/${{ env.ZIP_NAME }}"
         push_options: "--force"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
