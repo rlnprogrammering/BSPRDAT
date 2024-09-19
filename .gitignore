@@ -14,6 +14,7 @@ bin
 !.paket/paket.bootstrapper.exe
 .ionide/
 .fake
+*.DS_Store
 
 ### Java ###
 # Compiled class file
