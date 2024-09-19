@@ -35,6 +35,11 @@ jobs:
         
         echo "ZIP_NAME=$zip_name" >> $GITHUB_ENV
 
+    - name: Move to directory
+      run: |
+        mkdir -p Zipped
+        mv ${{ env.ZIP_NAME }} Zipped/${{ env.ZIP_NAME }}
+
     - name: Push zipped file to repository
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
