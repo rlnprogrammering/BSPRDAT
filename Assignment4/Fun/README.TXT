@@ -7,7 +7,7 @@ archive fun2.zip contains additional files used in points D-F.
 
 A. Loading the micro-ML evaluator, with abstract syntax only
 
-   fsharpi Absyn.fs Fun.fs
+   dotnet fsi -r ../../fsharp/FsLexYacc.Runtime.dll Absyn.fs Fun.fs
 
    open Absyn;;
    open Fun;;
@@ -19,7 +19,7 @@ B. Generating and compiling the lexer and parser, and loading them:
 
    fsyacc --module FunPar FunPar.fsy
    fslex --unicode FunLex.fsl
-   fsharpi -r FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs Parse.fs   
+   dotnet fsi -r ../../fsharp/FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs Parse.fs   
 
    open Parse;;
    let e1 = fromString "5+7";;
@@ -31,7 +31,7 @@ C. Using the lexer, parser and first-order evaluator together:
 
    fsyacc --module FunPar FunPar.fsy
    fslex --unicode FunLex.fsl
-   fsharpi -r FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs Parse.fs Fun.fs ParseAndRun.fs
+   dotnet fsi -r ../../fsharp/FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs Parse.fs Fun.fs ParseAndRun.fs
 
    open ParseAndRun;;
    run (fromString "5+7");;
