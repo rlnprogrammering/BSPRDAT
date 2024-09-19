@@ -1,0 +1,42 @@
+name: Zip Assignment
+
+# Run this workflow when manually triggered with input
+on:
+  workflow_dispatch:
+    inputs:
+      assignment_number:
+        description: 'Assignment Number'
+        required: true
+        default: '1'
+
+jobs:
+  zip-assignment:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Check out the repository
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Step 2: Create a zip file
+    - name: Zip assignment folder
+      run: |
+        # Get the assignment number from the input
+        number=${{ github.event.inputs.assignment_number }}
+
+        # Ensure the zip folder naming format is correct
+        zip_name="BPRD-${number}-NataliePetersen-RasmusNielsen-FrederikRosenlund.zip"
+        
+        # Zip the assignment folder
+        zip -r "$zip_name" "Assignment${number}"
+
+    # Step 3: Push the zip file to the repository
+    - name: Push zipped file to repository
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+
+        # Add zip file to the repo
+        git add *.zip
+        git commit -m "Add zipped assignment ${number}"
+        git push
