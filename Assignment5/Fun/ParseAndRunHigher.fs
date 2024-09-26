@@ -149,13 +149,18 @@ let ex6521 = inferType (fromString "let f x = if x then true else false in f end
 let ex6522 = inferType (fromString "let f x = x+x in f end");;
 
 // int -> int -> int
-let ex6523 = inferType (fromString "let f x = x+x in f end");;
+let ex6532 = inferType (Parse.fromString @"let add x = let f y = x+y in f end in add end");;
 
 // ’a -> ’b -> ’a
+let ex6533 = inferType (Parse.fromString @"let add x = let f y = x in f end in add end");;
+
 
 // ’a -> ’b -> ’b
+let ex6534 = inferType (Parse.fromString @"let add x = let f y = y in f end in add end");;
 
 // (’a -> ’b) -> (’b -> ’c) -> (’a -> ’c)
 
+
 // ’a -> ’b
+
 // ’a
