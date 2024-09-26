@@ -11,4 +11,7 @@ let ex1 = merge ([3;5;12], [2;3;4;7]);;
 // ??
 
 (* Exercise 6.1 *)
-// in HigherFun.fs
+// in ParseAndRunHigher.fs
+
+(* Exercise 6.2 *)
+// in ParseAndRunHigher.fs
