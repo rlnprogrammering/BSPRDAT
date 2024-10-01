@@ -162,5 +162,7 @@ let ex6525 = inferType (Parse.fromString @"let add x = let f y = y in f end in a
 
 
 // ’a -> ’b
+let ex6527 = inferType (Parse.fromString @"let f x = f x in f end");; //works
 
 // ’a
+let ex6528 = inferType (Parse.fromString @"let f x = f x in f = f end");;
