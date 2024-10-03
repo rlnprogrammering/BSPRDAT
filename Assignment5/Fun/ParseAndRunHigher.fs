@@ -87,11 +87,12 @@ let ex614 =
         fromString
             @"let add x = let f y = x+y in f end
               in add 2 end";; 
-
-// run ex611;;
-// run ex612;;
-// run ex613;;
-// run ex614;; 
+(*
+run ex611;;
+run ex612;;
+run ex613;;
+run ex614;; 
+*)
 (* explaination of ex614: 'add 2' is a higher order function, that returns f with x bound to 2
     The returned function f is a closure because it captures the environment where x is 2. *)
 
@@ -119,9 +120,11 @@ let ex632 = fromString @"let add = fun x -> fun y -> x+y
 
 (* Exercise 6.4 *)
 let ex641 = fromString @"let f x = 1 in f f end";;
+// run ex641;;
 
 let ex642 = fromString @"let f x = if x<10 then 42 else f(x+1)
                             in f 20 end";;
+// run ex642;; // (infinite loop!)
 
 
 (* Exercise 6.5 (1) *)
@@ -173,7 +176,7 @@ let ex6525 = inferType (fromString @"let add x = let f y = y in f end in add end
 
 
 // ’a -> ’b
-let ex6527 = inferType (Parse.fromString @"let f x = f x in f end");; // works
+let ex6527 = inferType (fromString @"let f x = f x in f end");;
 
 // ’a
-let ex6528 = inferType (Parse.fromString @"let f x = f x in f 42 end");; // works 
+let ex6528 = inferType (fromString @"let f x = f x in f 42 end");;
