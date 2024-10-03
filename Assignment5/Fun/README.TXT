@@ -1,3 +1,9 @@
+
+
+Dear TA's go to program.fs
+
+
+
 Compiling and loading the micro-ML evaluator and parser (Fun/README.TXT)
 ------------------------------------------------------------------------
 
@@ -26,7 +32,7 @@ E. Using the lexer, parser and higher-order evaluator together:
 
    fsyacc --module FunPar FunPar.fsy
    fslex --unicode FunLex.fsl
-   fsharpi -r FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs Parse.fs HigherFun.fs ParseAndRunHigher.fs
+   dotnet fsi -r ../../fsharp/FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs Parse.fs HigherFun.fs ParseAndRunHigher.fs
 
    open ParseAndRunHigher;;
    run (fromString @"let twice f = let g x = f(f(x)) in g end 
@@ -38,7 +44,7 @@ F. Using the lexer, parser and polymorphic type inference together:
 
    fsyacc --module FunPar FunPar.fsy
    fslex --unicode FunLex.fsl
-   fsharpi -r FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs Parse.fs TypeInference.fs ParseAndType.fs
+   dotnet fsi -r ../../fsharp/FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs Parse.fs HigherFun.fs TypeInference.fs ParseAndType.fs ParseAndRunHigher.fs
 
    open ParseAndType;;
    inferType (fromString "let f x = 1 in f 7 + f false end");;

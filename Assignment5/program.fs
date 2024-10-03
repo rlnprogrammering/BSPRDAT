@@ -8,10 +8,8 @@ let ex1 = merge ([3;5;12], [2;3;4;7]);;
 // see program.java
 
 (* Exercise 5.7 *)
-// ??
+// <insert rule tree here>??
 
-(* Exercise 6.1 *)
-// in ParseAndRunHigher.fs
+(* Exercises 6.1 6.2 6.3 6.4 6.5 *)
+// see ParseAndRunHigher.fs
 
-(* Exercise 6.2 *)
-// in ParseAndRunHigher.fs
