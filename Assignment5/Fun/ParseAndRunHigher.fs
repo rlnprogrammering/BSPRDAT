@@ -173,7 +173,7 @@ let ex6524 = inferType (fromString @"let add x = let f y = x in f end in add end
 let ex6525 = inferType (fromString @"let add x = let f y = y in f end in add end");;
 
 // (’a -> ’b) -> (’b -> ’c) -> (’a -> ’c)
-
+let ex6526 = inferType (fromString @"let f x = let g y = let h z = y (x z) in h end in g end in f end");;
 
 // ’a -> ’b
 let ex6527 = inferType (fromString @"let f x = f x in f end");;
