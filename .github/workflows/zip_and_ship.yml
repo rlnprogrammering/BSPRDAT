@@ -5,9 +5,9 @@ on:
   workflow_dispatch:
     inputs:
       assignment_number:
-        description: 'Assignment Number'
-        required: true
-        default: '1'
+        description: 'Assignment Number (leave blank for latest)'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -17,15 +17,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Check out the repository
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    # Step 2: Create a zip file
+    # Step 2: Find the latest assignment number (only if no input is provided)
+    - name: Find latest assignment
+      if: ${{ github.event.inputs.assignment_number == '' }}
+      id: find-latest
+      run: |
+        # Find the highest assignment number in the folder names (e.g., Assignment1, Assignment2, etc.)
+        latest_assignment=$(ls | grep -oP 'Assignment\K\d+' | sort -n | tail -1)
+        
+        # If no assignment folder exists, fail the workflow
+        if [ -z "$latest_assignment" ]; then
+          echo "No assignment folders found!"
+          exit 1
+        fi
+        
+        # Store the highest assignment number as output
+        echo "Latest assignment folder: Assignment${latest_assignment}"
+        echo "number=${latest_assignment}" >> $GITHUB_ENV
+
+    # Step 3: Use manual input or the detected latest assignment number
+    - name: Set assignment number
+      run: |
+        # Use the manually provided assignment number if it exists, otherwise use the latest found
+        if [ "${{ github.event.inputs.assignment_number }}" != "" ]; then
+          number=${{ github.event.inputs.assignment_number }}
+        else
+          number=${{ env.number }}
+        fi
+
+        echo "Using assignment number: ${number}"
+        echo "NUMBER=$number" >> $GITHUB_ENV
+
     - name: Zip assignment folder
       run: |
-        # Get the assignment number from the input
-        number=${{ github.event.inputs.assignment_number }}
+        number=${{ env.NUMBER }}
 
         # Ensure the zip folder naming format is correct
         zip_name="BPRD-${number}-NataliePetersen-RasmusNielsen-FrederikRosenlund.zip"
@@ -43,7 +71,7 @@ jobs:
     - name: Push zipped file to repository
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: "Add zipped assignment ${{ github.event.inputs.assignment_number }}"
+        commit_message: "Add zipped assignment ${{ env.NUMBER }}"
         file_pattern: "Zipped/${{ env.ZIP_NAME }}"
         push_options: "--force"
       env:
