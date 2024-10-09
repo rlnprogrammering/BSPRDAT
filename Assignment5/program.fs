@@ -8,8 +8,13 @@ let ex1 = merge ([3;5;12], [2;3;4;7]);;
 // see program.java
 
 (* Exercise 5.7 *)
-// <insert rule tree here>??
+// see TypeInference.fs
 
-(* Exercises 6.1 6.2 6.3 6.4 6.5 *)
+(* Exercise 6.4 *)
+// (we would love comprehensive feedback on this)
+// 6_4_i.png
+// 6_4_ii.heic
+
+(* Exercises 6.1 6.2 6.3 6.5 *)
 // see ParseAndRunHigher.fs
 
