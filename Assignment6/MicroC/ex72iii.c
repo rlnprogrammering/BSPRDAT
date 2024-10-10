@@ -1,4 +1,4 @@
-void main(int n) { 
+void main() { 
     int ns[7];
     ns[0]=1;
     ns[1]=2;
@@ -8,9 +8,10 @@ void main(int n) {
     ns[5]=2;
     ns[6]=0;
 
+    int freq[4]; // freq length 4, meaning maxlength is 3
+
     int i;
     i = 0;
-    int freq[4];
     while (i < 4) {
         freq[i]=0;
         i=i+1;
