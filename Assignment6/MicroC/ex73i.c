@@ -15,6 +15,6 @@ void main(int n) {
 void arrsum(int n, int arr[], int *sump) {
     int i;
 
-    for (i = 0; i < n; i++)
+    for (i = 0; i < n; i=i+i)
         *sump = *sump + arr[i];
 }
