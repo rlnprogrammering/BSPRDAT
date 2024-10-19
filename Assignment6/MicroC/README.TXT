@@ -1,3 +1,20 @@
+--------------------------------------------------------------
+Hello TA :D
+
+
+Exercise 7.2:
+see ex72i.c ex72ii.c ex72iii.c
+
+Exercise 7.3:
+see ex73i.c ex73ii.c ex73iii.c
+
+Exercise 7.4 and 7.5:
+see ex75.c (we could only test 7.4 after implementing 7.5)
+
+
+--------------------------------------------------------------
+
+
 Compiling and loading the micro-C evaluator and parser (MicroC/README.TXT)
 --------------------------------------------------------------------------
 
