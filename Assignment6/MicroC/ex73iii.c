@@ -10,9 +10,10 @@ void main() {
 
     int freq[4]; // freq length 4, meaning maxlength is 3
 
-    for (int i=0; i < 4; i=i+i)
-      freq[i]=0;
-    
+    int i;
+    for (i = 0;i < 4;i=i+1) {
+        freq[i]=0;
+    }
     histogram(7, ns, 3, freq);
     printarr(4, freq);
     println;
@@ -20,19 +21,17 @@ void main() {
 
 void histogram(int n, int ns[], int max, int freq[]) {
     int i;
-    i = 0;
 
-    while (i < n) {
-      int num;
-      num = ns[i];
-      freq[num] = freq[num] + 1;
-      i = i + 1;
+    for (i = 0;i < n;i=i+1) {
+        int num;
+        num = ns[i];
+        freq[num] = freq[num] + 1;
     }
 }
 
 void printarr(int len, int a[]) {
   int i; 
-  i = 0; 
-  for (i = 0;i < len;i=i+i) 
-    print a[i];
+  for (i = 0;i < len;i=i+1) {
+    print a[i]; 
+  } 
 }

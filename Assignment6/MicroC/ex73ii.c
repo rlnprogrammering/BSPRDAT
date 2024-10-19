@@ -14,12 +14,12 @@ void main(int n) {
 void squares(int n, int arr[]) {
     int i;
 
-    for (i = 0; i < n; i=i+i)
+    for (i = 0; i < n; i=i+1) 
         arr[i] = i*i;
 }
 
 void arrsum(int n, int arr[], int *sump) {
-
-    for (int i = 0; i < n; i=i+i)
+    int i;
+    for (i = 0; i < n; i=i+1)
         *sump = *sump + arr[i];
 }
