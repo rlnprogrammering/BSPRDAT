@@ -3,9 +3,72 @@ Hello TA :D
 
 
 Exercise 8.1:
-Udført ved at følge instruks B i denne README.
+(i) Udført ved at følge instruks B i denne README.
+(ii) Write up the bytecode in a more structured way with labels only at the beginning of the line (as in this chapter):
+Kør:
+   open ParseAndComp;;
+   fromFile "ex3.c";;
+Få: 
+   Prog
+    [Fundec
+       (None, "main", [(TypI, "n")],
+        Block
+          [Dec (TypI, "i"); Stmt (Expr (Assign (AccVar "i", CstI 0)));
+           Stmt
+             (While
+                (Prim2 ("<", Access (AccVar "i"), Access (AccVar "n")),
+                 Block
+                   [Stmt (Expr (Prim1 ("printi", Access (AccVar "i"))));
+                    Stmt
+                      (Expr
+                         (Assign
+                            (AccVar "i",
+                             Prim2 ("+", Access (AccVar "i"), CstI 1))))]))])]
+
+compileToFile (fromFile "ex3.c") "ex3.out";; 
+og formatér og skriv kommentarer ud fra ovenstående:
+[  LDARGS; CALL (1, "L1"); STOP; 
+   Label "L1";                   - Main
+   INCSP 1;                      - Dec(TypI, ”i”), allocate i
+   GETBP; CSTI 1; ADD;           - AccVar ”i”, get address of i at offset 1
+   CSTI 0;                       - CstI 0, put 0 on the stack
+   STI;                          - Store 42 in address i
+   INCSP -1;                     - Remove result of assigment (Expr)
+   GOTO "L3";                    - Jump to condition check
+
+   Label "L2";                   - Block
+   GETBP; CSTI 1; ADD;           - AccVar ”i”, get address of i at offset 1
+   LDI;                          - Access ”i”, load content of i
+   PRINTI;                       - Print value of i
+   INCSP -1;                     - Remove result of print (Expr)         
+   GETBP; CSTI 1; ADD;           - AccVar ”i”, get address of i at offset 1
+   GETBP; CSTI 1; ADD;           - AccVar ”i”, get address of i at offset 1
+   LDI;                          - Load content of i
+   CSTI 1;                       - CstI 1, put 1 on the stack
+   ADD;                          - Increment i by 1
+   STI;                          - Store incremented value back to i
+   INCSP -1;                     - Remove result of assignment (Expr)
+   INCSP 0; 
+   
+   Label "L3";                   - Condition check
+   GETBP; CSTI 1; ADD;           - AccVar "i", get address of i at offset 1
+   LDI;                          - Load content of i
+   GETBP; CSTI 0; ADD;           - AccVar "n", get address of n at offset 0
+   LDI;                          - Load content of n
+   LT;                           - Compare i < n (LT = less than)
+   IFNZRO "L2";                  - If not zero, go to label L2
+   INCSP -1;                     - Remove result of comparison (Expr)
+   RET 0                         - Return from function
+]
 
 Exercise 8.3:
+Skal laves i Comp.fs i funktionen: cExpr
+void main(int n) { 
+    n = n + 1;
+}
+Bliver compilet til:
+[LDARGS; CALL (1, "L1"); STOP; Label "L1"; GETBP; CSTI 0; ADD; GETBP; CSTI 0;
+   ADD; LDI; CSTI 1; ADD; STI; INCSP -1; INCSP 0; RET 0]
 
 Exercise 8.4:
 
