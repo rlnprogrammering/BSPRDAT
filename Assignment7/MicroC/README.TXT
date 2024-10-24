@@ -27,7 +27,9 @@ Få:
 
 compileToFile (fromFile "ex3.c") "ex3.out";; 
 og formatér og skriv kommentarer ud fra ovenstående:
-[  LDARGS; CALL (1, "L1"); STOP; 
+[  LDARGS;                       - Loads n on the stack
+   CALL (1, "L1"); STOP; 
+
    Label "L1";                   - Main
    INCSP 1;                      - Dec(TypI, ”i”), allocate i
    GETBP; CSTI 1; ADD;           - AccVar ”i”, get address of i at offset 1
@@ -60,15 +62,20 @@ og formatér og skriv kommentarer ud fra ovenstående:
    INCSP -1;                     - Remove result of comparison (Expr)
    RET 0                         - Return from function
 ]
+Prøve gennemgang af stacken for ex3.c hvor n=2: (gav lidt op undervejs, kan I hjælpe?)
+[]
+[n] - LDARGS n
+[r|bp|n] - Call (1, "L1")
+[r|bp|n| ] - INCSP 1
+[r|bp|n| |bp] - GETBP
+[r|bp|n| |bp|1] - CSTI 1
+[r|bp|n| |bp+1] - ADD
+[r|bp|n| |bp+1|0] - CSTI 0
+[r|bp|n| |0] - STI
+
 
 Exercise 8.3:
 Skal laves i Comp.fs i funktionen: cExpr
-void main(int n) { 
-    n = n + 1;
-}
-Bliver compilet til:
-[LDARGS; CALL (1, "L1"); STOP; Label "L1"; GETBP; CSTI 0; ADD; GETBP; CSTI 0;
-   ADD; LDI; CSTI 1; ADD; STI; INCSP -1; INCSP 0; RET 0]
 
 Exercise 8.4:
 
