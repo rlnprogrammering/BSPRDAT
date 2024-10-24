@@ -62,7 +62,7 @@ og formatér og skriv kommentarer ud fra ovenstående:
    INCSP -1;                     - Remove result of comparison (Expr)
    RET 0                         - Return from function
 ]
-Prøve gennemgang af stacken for ex3.c hvor n=2: (gav lidt op undervejs, kan I hjælpe?)
+Prøve gennemgang af stacken for ex3.c hvor n=1:
 []
 [n] - LDARGS n
 [r|bp|n] - Call (1, "L1")
@@ -71,7 +71,45 @@ Prøve gennemgang af stacken for ex3.c hvor n=2: (gav lidt op undervejs, kan I h
 [r|bp|n| |bp|1] - CSTI 1
 [r|bp|n| |bp+1] - ADD
 [r|bp|n| |bp+1|0] - CSTI 0
-[r|bp|n| |0] - STI
+[r|bp|n|0|0] - STI
+[r|bp|n|0] - INCSP -1
+[r|bp|n|0] - goto (ingen ændring) (jump til condition check "L3")
+*vi har nu n og i på stakken og bp peger på n*
+
+*L3*
+[r|bp|n|0|bp|1] - GETBP;CSTI 1;
+[r|bp|n|0|bp+1] - ADD
+[r|bp|n|0|0] - LDI (load addres af i)
+[r|bp|n|0|0|bp|0] - GETBP;CSTI 0;
+[r|bp|n|0|0|bp+0] - ADD
+[r|bp|n|0|0|n] - LDI (load addres af n)
+[r|bp|n|0|1] - LT (0 < n) hvilket er true så resultatet er 1
+[r|bp|n|0] - IFNZRO (jump til block "L2")
+
+*L2*
+[r|bp|n|0|bp|1] - GETBP;CSTI 1;
+[r|bp|n|0|bp+1] - ADD
+[r|bp|n|0|bp+1|bp|1] - GETBP;CSTI 1;
+[r|bp|n|0|bp+1|bp+1] - ADD
+[r|bp|n|0|bp+1|0] - LDI
+[r|bp|n|0|bp+1|0|1] - CSTI 1
+[r|bp|n|0|bp+1|1] - ADD
+[r|bp|n|1|1] - STI
+[r|bp|n|1] - INCSP -1
+[r|bp|n|1] - INCSP 0 (gør ingenting? koden er ikke optimeret)
+
+*L3*
+[r|bp|n|1|bp|1] - GETBP;CSTI 1;
+[r|bp|n|1|bp+1] - ADD
+[r|bp|n|1|1] - LDI (load addres af i)
+[r|bp|n|1|1|bp|0] - GETBP;CSTI 0;
+[r|bp|n|1|1|bp+0] - ADD
+[r|bp|n|1|1|n] - LDI (load addres af n)
+[r|bp|n|1|1] - LT (1 < n) hvilket er false da n = 1 så resultatet er 0
+[r|bp|n|1] - IFNZRO (jumper ikke)
+[r|bp|n] - INCSP -1
+[] - RET 0
+
 
 
 Exercise 8.3:
