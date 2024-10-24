@@ -32,7 +32,7 @@ og formatér og skriv kommentarer ud fra ovenstående:
    INCSP 1;                      - Dec(TypI, ”i”), allocate i
    GETBP; CSTI 1; ADD;           - AccVar ”i”, get address of i at offset 1
    CSTI 0;                       - CstI 0, put 0 on the stack
-   STI;                          - Store 42 in address i
+   STI;                          - Store 0 in address i
    INCSP -1;                     - Remove result of assigment (Expr)
    GOTO "L3";                    - Jump to condition check
 
