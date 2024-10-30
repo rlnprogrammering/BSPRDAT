@@ -1,13 +1,15 @@
 Hello TA :D
 
 
-Exercise 8.1:
+**Exercise 8.1:**
 (i) Udført ved at følge instruks B i denne README.
+
 (ii) Write up the bytecode in a more structured way with labels only at the beginning of the line (as in this chapter):
 ** ex3 **
 Kør:
    open ParseAndComp;;
    compileToFile (fromFile "ex3.c") "ex3.out";; 
+
 
 Write up bytecode in more structured way:
 [  LDARGS;                       - Loads n (the CLI argument) on the stack
