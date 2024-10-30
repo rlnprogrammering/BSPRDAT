@@ -200,11 +200,102 @@ RET 1;                                                               -> }
 ```
 
 
-Exercise 8.3:
-Skal laves i Comp.fs i funktionen: cExpr
+## Exercise 8.3:
+Lavet i Comp.fs i funktionen: cExpr linje 173-174
 
-Exercise 8.4:
+**Example:**
+```bash
+> compile "ex75";;
+val it: Machine.instr list =
+  [LDARGS; CALL (1, "L1"); STOP; Label "L1"; GETBP; CSTI 0; ADD; DUP; LDI;
+   CSTI 1; ADD; STI; INCSP -1; GETBP; CSTI 0; ADD; LDI; PRINTI; INCSP -1;
+   CSTI 10; PRINTC; INCSP -1; GETBP; CSTI 0; ADD; DUP; LDI; CSTI 1; SUB; STI;
+   INCSP -1; GETBP; CSTI 0; ADD; LDI; PRINTI; INCSP -1; CSTI 10; PRINTC;
+   INCSP -1; INCSP 0; RET 0]
+```
 
-Exercise 8.5: 
 
-Exercise 8.6:
+## Exercise 8.4:
+**Outputs from the 2 programs:**
+```bash
+$  MicroC: java Machine prog1
+
+Ran 0.155 seconds
+$  MicroC: java Machine ex8.out
+
+Ran 0.638 seconds
+```
+
+This is the instructions for prog1
+
+0 20000000 16 7 0 1 2 9 18 4 25
+
+```bash
+CSTI 20000000; # 0 20000000
+GOTO 7; # 16 7
+CSTI 1; # 0 1
+SUB; # 2
+DUP; # 9
+IFNZRO 4; # 18 4
+STOP; # 25
+```
+
+This is the instructions for ex8:
+```bash
+[
+LDARGS; CALL (0, "L1"); STOP; Label "L1"; 
+INCSP 1; 
+GETBP; CSTI 0; ADD;
+CSTI 20000000; # Same as prog1
+STI; INCSP -1; 
+GOTO "L3"; 
+Label "L2"; 
+GETBP; CSTI 0; ADD; # instead of dup
+GETBP; CSTI 0; ADD;  # instead of dup
+LDI;
+CSTI 1; SUB; # Same as prog1
+STI; INCSP -1; INCSP 0;
+Label "L3";
+GETBP; CSTI 0; ADD; LDI; 
+IFNZRO "L2"; #same as prog1
+INCSP -1; 
+RET -1]
+```
+
+We have marked all the places in ex8, that corresponds to the method in prog1. It is clear to see that ex8 makes a lot of declarations and handling of variables, which prog1 doesn't have to care about. Therefore prog1 is much faster, as it simply runs the instructions right from the top of the stack.
+
+Snapshot of stacktrace for ex8 that shows how many addresses in the stack it has to handle:
+
+```bash
+[ 4 -999 19988939 2 19988939 ]{27: CSTI 1}
+[ 4 -999 19988939 2 19988939 1 ]{29: SUB}
+[ 4 -999 19988939 2 19988938 ]{30: STI}
+[ 4 -999 19988938 19988938 ]{31: INCSP -1}
+[ 4 -999 19988938 ]{33: INCSP 0}
+```
+
+Compared to prog1:
+```bash
+[ 19982965 ]{7: DUP}
+[ 19982965 19982965 ]{8: IFNZRO 4}
+[ 19982965 ]{4: CSTI 1}
+[ 19982965 1 ]{6: SUB}
+```
+
+To demonstrate that it is not just the preInc and PreDec that are fast, but actually the variable declarations, we have created a new example `ex84.c` that does the same to compare time:
+
+```bash
+MicroC: java Machine ex8.out
+
+Ran 0.635 seconds
+MicroC: java Machine ex84.out
+
+Ran 0.691 seconds
+MicroC: java Machine prog1
+
+Ran 0.156 seconds
+```
+
+## Exercise 8.5: 
+
+## Exercise 8.6:
