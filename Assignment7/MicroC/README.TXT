@@ -27,8 +27,8 @@ Få:
 
 compileToFile (fromFile "ex3.c") "ex3.out";; 
 og formatér og skriv kommentarer ud fra ovenstående:
-[  LDARGS;                       - Loads n on the stack
-   CALL (1, "L1"); STOP; 
+[  LDARGS;                       - Loads n (the CLI argument) on the stack
+   CALL (1, "L1"); STOP;         - Pushes the current bp and return address (before the loaded args)
 
    Label "L1";                   - Main
    INCSP 1;                      - Dec(TypI, ”i”), allocate i
@@ -63,52 +63,59 @@ og formatér og skriv kommentarer ud fra ovenstående:
    RET 0                         - Return from function
 ]
 Prøve gennemgang af stacken for ex3.c hvor n=1:
-[]
-[n] - LDARGS n
-[r|bp|n] - Call (1, "L1")
-[r|bp|n| ] - INCSP 1
-[r|bp|n| |bp] - GETBP
-[r|bp|n| |bp|1] - CSTI 1
-[r|bp|n| |bp+1] - ADD
-[r|bp|n| |bp+1|0] - CSTI 0
-[r|bp|n|0|0] - STI
-[r|bp|n|0] - INCSP -1
+[] - LDARGS n (loader CLI argumentet)
+[n] - Call (1, "L1")
+[r|bp|n] - INCSP 1 (gør plads til ny variabel i)
+[r|bp|n|0] - GETBP  (get address of bp on stack)
+[r|bp|n|0|&bp] - CSTI 1
+[r|bp|n|0|&bp|1] - ADD
+[r|bp|n|0|&bp+1] - CSTI 0
+[r|bp|n|0|&bp+1|0] - STI (stores 0 on &bp + offset 1 which is address for i), then removes the address from the stack
+[r|bp|n|0|0] - INCSP -1 (STI does not remove the value it stored, after storing it, so this cleans it up)
 [r|bp|n|0] - goto (ingen ændring) (jump til condition check "L3")
 *vi har nu n og i på stakken og bp peger på n*
 
 *L3*
-[r|bp|n|0|bp|1] - GETBP;CSTI 1;
-[r|bp|n|0|bp+1] - ADD
-[r|bp|n|0|0] - LDI (load addres af i)
-[r|bp|n|0|0|bp|0] - GETBP;CSTI 0;
-[r|bp|n|0|0|bp+0] - ADD
-[r|bp|n|0|0|n] - LDI (load addres af n)
-[r|bp|n|0|1] - LT (0 < n) hvilket er true så resultatet er 1
-[r|bp|n|0] - IFNZRO (jump til block "L2")
+[r|bp|n|0] - GETBP;CSTI 1;
+[r|bp|n|0|&bp|1] - ADD
+[r|bp|n|0|&bp+1] - LDI (load value på addressen af i)
+[r|bp|n|0|0] - GETBP;CSTI 0;
+[r|bp|n|0|0|&bp|0] - ADD
+[r|bp|n|0|0|&bp+0] - LDI (load value på addressen af n)
+[r|bp|n|0|0|n] - LT (0 < n) hvilket er true så resultatet er 1
+[r|bp|n|0|1] - IFNZRO (jump til block "L2")
+[r|bp|n|0]
 
 *L2*
-[r|bp|n|0|bp|1] - GETBP;CSTI 1;
-[r|bp|n|0|bp+1] - ADD
-[r|bp|n|0|bp+1|bp|1] - GETBP;CSTI 1;
-[r|bp|n|0|bp+1|bp+1] - ADD
-[r|bp|n|0|bp+1|0] - LDI
-[r|bp|n|0|bp+1|0|1] - CSTI 1
-[r|bp|n|0|bp+1|1] - ADD
-[r|bp|n|1|1] - STI
-[r|bp|n|1] - INCSP -1
+[r|bp|n|0] - GETBP;CSTI 1;
+[r|bp|n|0|&bp|1] - ADD 
+[r|bp|n|0|&bp+1] - LDI (load value på addressen af i)
+[r|bp|n|0|0] - PRINTI
+[r|bp|n|0|0] - INCSP -1 (cleanup af loaded value som blev brugt til print)
+[r|bp|n|0] - GETBP;CSTI 1;
+[r|bp|n|0|&bp|1] - ADD
+[r|bp|n|0|&bp+1] - GETBP;CSTI 1
+[r|bp|n|0|&bp+1|&bp|1] - ADD
+[r|bp|n|0|&bp+1|&bp+1] - LDI (load value på addressen af i)
+[r|bp|n|0|&bp+1|0] - CSTI 1
+[r|bp|n|0|&bp+1|0|1] - ADD
+[r|bp|n|0|&bp+1|1] - STI (stores 1 on bp + offset 1 which is address for i, then removes the address from the stack)
+[r|bp|n|1|1] - INCSP -1 (cleanup af loaded value som blev stored på adressen for i)
 [r|bp|n|1] - INCSP 0 (gør ingenting? koden er ikke optimeret)
+[r|bp|n|1]
 
 *L3*
-[r|bp|n|1|bp|1] - GETBP;CSTI 1;
-[r|bp|n|1|bp+1] - ADD
-[r|bp|n|1|1] - LDI (load addres af i)
-[r|bp|n|1|1|bp|0] - GETBP;CSTI 0;
-[r|bp|n|1|1|bp+0] - ADD
-[r|bp|n|1|1|n] - LDI (load addres af n)
-[r|bp|n|1|1] - LT (1 < n) hvilket er false da n = 1 så resultatet er 0
-[r|bp|n|1] - IFNZRO (jumper ikke)
-[r|bp|n] - INCSP -1
-[] - RET 0
+[r|bp|n|1] - GETBP;CSTI 1;
+[r|bp|n|1|bp|1] - ADD
+[r|bp|n|1|bp+1] - LDI (load value på addressen af i)
+[r|bp|n|1|1] - GETBP;CSTI 0;
+[r|bp|n|1|1|bp|0] - ADD
+[r|bp|n|1|1|bp+0] - LDI (load value på addressen af n)
+[r|bp|n|1|1|n] - LT (1 < n) hvilket er false da n = 1 så resultatet er 0
+[r|bp|n|1|0] - IFNZRO (jumper ikke)
+[r|bp|n|1] - INCSP -1 (fjerner i som er en lokal variabel)
+[r|bp|n] - RET 0
+[n] - stop
 
 
 
