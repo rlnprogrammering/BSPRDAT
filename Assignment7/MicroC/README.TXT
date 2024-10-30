@@ -5,28 +5,12 @@ Hello TA :D
 Exercise 8.1:
 (i) Udført ved at følge instruks B i denne README.
 (ii) Write up the bytecode in a more structured way with labels only at the beginning of the line (as in this chapter):
+** ex3 **
 Kør:
    open ParseAndComp;;
-   fromFile "ex3.c";;
-Få: 
-   Prog
-    [Fundec
-       (None, "main", [(TypI, "n")],
-        Block
-          [Dec (TypI, "i"); Stmt (Expr (Assign (AccVar "i", CstI 0)));
-           Stmt
-             (While
-                (Prim2 ("<", Access (AccVar "i"), Access (AccVar "n")),
-                 Block
-                   [Stmt (Expr (Prim1 ("printi", Access (AccVar "i"))));
-                    Stmt
-                      (Expr
-                         (Assign
-                            (AccVar "i",
-                             Prim2 ("+", Access (AccVar "i"), CstI 1))))]))])]
+   compileToFile (fromFile "ex3.c") "ex3.out";; 
 
-compileToFile (fromFile "ex3.c") "ex3.out";; 
-og formatér og skriv kommentarer ud fra ovenstående:
+Write up bytecode in more structured way:
 [  LDARGS;                       - Loads n (the CLI argument) on the stack
    CALL (1, "L1"); STOP;         - Pushes the current bp and return address (before the loaded args)
 
@@ -62,6 +46,19 @@ og formatér og skriv kommentarer ud fra ovenstående:
    INCSP -1;                     - Remove result of comparison (Expr)
    RET 0                         - Return from function
 ]
+
+With MicroC code side by side:
+   LDARGS; CALL (1, "L1"); STOP;                -> void main(int n)
+   Label "L1"; INCSP 1;                         -> int = i;
+   GETBP; CSTI 1; ADD; CSTI 0; STI; INCSP -1;   -> i = 0;
+   GOTO "L3";                                   -> while
+
+   Label "L3"; GETBP; CSTI 1; ADD; LDI; GETBP; CSTI 0; ADD; LDI; LT; IFNZRO "L2"; INCSP -1;  -> (i < n)
+
+   Label "L2"; GETBP; CSTI 1; ADD;  LDI; PRINTI;INCSP -1;                                    -> print i;                   
+   GETBP; CSTI 1; ADD; GETBP; CSTI 1; ADD; LDI; CSTI 1; ADD; STI; INCSP -1; INCSP 0;         -> i=i+1
+
+
 Prøve gennemgang af stacken for ex3.c hvor n=1:
 [] - LDARGS n (loader CLI argumentet)
 [n] - Call (1, "L1")
@@ -116,6 +113,25 @@ Prøve gennemgang af stacken for ex3.c hvor n=1:
 [r|bp|n|1] - INCSP -1 (fjerner i som er en lokal variabel)
 [r|bp|n] - RET 0
 [n] - stop
+
+** ex5 **
+Kør:
+   open ParseAndComp;;
+   compileToFile (fromFile "ex5.c") "ex5.out";; 
+
+og formatér og skriv coden side by side:
+LDARGS; CALL (1, "L1"); STOP; Label "L1";                            -> void main(int n){
+INCSP 1;                                                             -> int = r;
+GETBP; CSTI 1; ADD; GETBP; CSTI 0; ADD; LDI; STI; INCSP -1;          -> r = n;
+INCSP 1;                                                             -> int = r;
+GETBP; CSTI 0; ADD; LDI; GETBP; CSTI 2; ADD; CALL (2, "L2");INCSP -1;-> square(n, &r);
+GETBP; CSTI 2; ADD; LDI; PRINTI; INCSP -1; INCSP -1;                 -> print r;
+GETBP; CSTI 1; ADD; LDI; PRINTI; INCSP -1; INCSP -1;                 -> print r;
+RET 0;                                                               -> }
+Label "L2";                                                          -> void square(int i, int *rp) {
+GETBP; CSTI 1; ADD; LDI; GETBP; CSTI 0; ADD; LDI; GETBP; CSTI 0; ADD; LDI; MUL; STI; INCSP -1; INCSP 0; -> *rp = i * i;
+RET 1;                                                               -> }
+
 
 
 
