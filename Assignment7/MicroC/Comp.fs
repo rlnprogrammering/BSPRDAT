@@ -162,12 +162,16 @@ and cStmtOrDec stmtOrDec (varEnv : varEnv) (funEnv : funEnv) : varEnv * instr li
    stack top (and thus extend the current stack frame with one element).  
 *)
 
+
+
 and cExpr (e : expr) (varEnv : varEnv) (funEnv : funEnv) : instr list = 
     match e with
     | Access acc     -> cAccess acc varEnv funEnv @ [LDI] 
     | Assign(acc, e) -> cAccess acc varEnv funEnv @ cExpr e varEnv funEnv @ [STI]
     | CstI i         -> [CSTI i]
     | Addr acc       -> cAccess acc varEnv funEnv
+    | PreInc(acc)    -> cAccess acc varEnv funEnv @ [DUP; LDI; CSTI 1; ADD; STI]
+    | PreDec(acc)    -> cAccess acc varEnv funEnv @ [DUP; LDI; CSTI 1; SUB; STI]
     | Prim1(ope, e1) ->
       cExpr e1 varEnv funEnv
       @ (match ope with
