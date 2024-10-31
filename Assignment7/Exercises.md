@@ -12,6 +12,7 @@ Kør:
 
 
 Write up bytecode in more structured way:
+```bash
 [  LDARGS;                       - Loads n (the CLI argument) on the stack
    CALL (1, "L1"); STOP;         - Pushes the current bp and return address (before the loaded args)
 
@@ -47,9 +48,10 @@ Write up bytecode in more structured way:
    INCSP -1;                     - Remove result of comparison (Expr)
    RET 0                         - Return from function
 ]
-
+```
 With MicroC code side by side:
-   LDARGS; CALL (1, "L1"); STOP;                -> void main(int n)
+```bash
+LDARGS; CALL (1, "L1"); STOP;                -> void main(int n)
    Label "L1"; INCSP 1;                         -> int = i;
    GETBP; CSTI 1; ADD; CSTI 0; STI; INCSP -1;   -> i = 0;
    GOTO "L3";                                   -> while
@@ -58,12 +60,13 @@ With MicroC code side by side:
 
    Label "L2"; GETBP; CSTI 1; ADD;  LDI; PRINTI;INCSP -1;                                    -> print i;                   
    GETBP; CSTI 1; ADD; GETBP; CSTI 1; ADD; LDI; CSTI 1; ADD; STI; INCSP -1; INCSP 0;         -> i=i+1
-
+```
 
 Prøve gennemgang af stacken for ex3.c hvor n=1:
 
 **(Note:** &bp is just wierd notation for the current base pointer, to make it more visble that we are working with an address)
 
+```bash
 [] - LDARGS n (loader CLI argumentet)
 [n] - Call (1, "L1")
 [r|bp|n] - INCSP 1 (gør plads til ny variabel i)
@@ -117,13 +120,14 @@ Prøve gennemgang af stacken for ex3.c hvor n=1:
 [r|bp|n|1] - INCSP -1 (fjerner i som er en lokal variabel)
 [r|bp|n] - RET 0
 [n] - stop
-
+```
 **ex5** 
 Kør:
    open ParseAndComp;;
    compileToFile (fromFile "ex5.c") "ex5.out";; 
 
 og formatér og skriv coden side by side:
+```bash
 LDARGS; CALL (1, "L1"); STOP; Label "L1";                            -> void main(int n){
 INCSP 1;                                                             -> int = r;
 GETBP; CSTI 1; ADD; GETBP; CSTI 0; ADD; LDI; STI; INCSP -1;          -> r = n;
@@ -135,7 +139,7 @@ RET 0;                                                               -> }
 Label "L2";                                                          -> void square(int i, int *rp) {
 GETBP; CSTI 1; ADD; LDI; GETBP; CSTI 0; ADD; LDI; GETBP; CSTI 0; ADD; LDI; MUL; STI; INCSP -1; INCSP 0; -> *rp = i * i;
 RET 1;                                                               -> }
-
+```
 
 ## Stacktrace:
 
@@ -240,7 +244,7 @@ IFNZRO 4; # 18 4
 STOP; # 25
 ```
 
-This is the instructions for ex8:
+**This is the instructions for ex8:**
 ```bash
 [
 LDARGS; CALL (0, "L1"); STOP; Label "L1"; 
@@ -274,7 +278,7 @@ Snapshot of stacktrace for ex8 that shows how many addresses in the stack it has
 [ 4 -999 19988938 ]{33: INCSP 0}
 ```
 
-Compared to prog1:
+_**Compared to prog1:**_
 ```bash
 [ 19982965 ]{7: DUP}
 [ 19982965 19982965 ]{8: IFNZRO 4}
@@ -296,6 +300,22 @@ MicroC: java Machine prog1
 Ran 0.156 seconds
 ```
 
+**Compiling the ex13:**
+```bash
+[LDARGS; CALL (1, "L1"); STOP; Label "L1"; INCSP 1; GETBP; CSTI 1; ADD;
+   CSTI 1889; STI; INCSP -1; GOTO "L3"; Label "L2"; GETBP; CSTI 1; ADD; GETBP;
+   CSTI 1; ADD; LDI; CSTI 1; ADD; STI; INCSP -1; GETBP; CSTI 1; ADD; LDI;
+   CSTI 4; MOD; CSTI 0; EQ; IFZERO "L7"; GETBP; CSTI 1; ADD; LDI; CSTI 100;
+   MOD; CSTI 0; EQ; NOT; IFNZRO "L9"; GETBP; CSTI 1; ADD; LDI; CSTI 400; MOD;
+   CSTI 0; EQ; GOTO "L8"; Label "L9"; CSTI 1; Label "L8"; GOTO "L6";
+   Label "L7"; CSTI 0; Label "L6"; IFZERO "L4"; GETBP; CSTI 1; ADD; LDI;
+   PRINTI; INCSP -1; GOTO "L5"; Label "L4"; INCSP 0; Label "L5"; INCSP 0;
+   Label "L3"; GETBP; CSTI 1; ADD; LDI; GETBP; CSTI 0; ADD; LDI; LT;
+   IFNZRO "L2"; INCSP -1; RET 0]
+```
+Looking at the symbolic bytecode, we can tell that it uses a lot of `GOTO` for loops and `IFZERO` and `IFNZRO` for conditionals.
+
 ## Exercise 8.5: 
+
 
 ## Exercise 8.6:

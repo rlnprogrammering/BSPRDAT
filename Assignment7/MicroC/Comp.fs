@@ -170,8 +170,8 @@ and cExpr (e : expr) (varEnv : varEnv) (funEnv : funEnv) : instr list =
     | Assign(acc, e) -> cAccess acc varEnv funEnv @ cExpr e varEnv funEnv @ [STI]
     | CstI i         -> [CSTI i]
     | Addr acc       -> cAccess acc varEnv funEnv
-    | PreInc(acc)    -> cAccess acc varEnv funEnv @ [DUP; LDI; CSTI 1; ADD; STI]
-    | PreDec(acc)    -> cAccess acc varEnv funEnv @ [DUP; LDI; CSTI 1; SUB; STI]
+    | PreInc(acc)    -> cAccess acc varEnv funEnv @ [DUP; LDI; CSTI 1; ADD; STI] // ex 8.3
+    | PreDec(acc)    -> cAccess acc varEnv funEnv @ [DUP; LDI; CSTI 1; SUB; STI] // ex 8.3
     | Prim1(ope, e1) ->
       cExpr e1 varEnv funEnv
       @ (match ope with
