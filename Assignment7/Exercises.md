@@ -359,3 +359,8 @@ INCSP -3; RET -1]
 
 
 ## Exercise 8.6:
+Modifications to solve this:
+
+`CPar.fsy`, `CLex.fsl`, `Absyn.fs` and `Comp.fs` 
+
+Example file: `ex86.c`
