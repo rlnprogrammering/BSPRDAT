@@ -217,6 +217,14 @@ and cExpr (e : expr) (varEnv : varEnv) (funEnv : funEnv) : instr list =
       @ cExpr e2 varEnv funEnv @ [GOTO labelEnd]
       @ [Label labelFalse] @ cExpr e3 varEnv funEnv
       @ [Label labelEnd]
+    | Switch(e, cases) ->
+      let endLabel = newLabel()
+      let caseLabels = List.map (fun _ -> newLabel()) cases.Tail @ [endLabel]
+      let caseBody =
+        List.map2 (fun (Case(value, stmt)) lbl ->
+          [DUP; CSTI value; EQ; IFZERO lbl] @ cStmt stmt varEnv funEnv @ [GOTO endLabel] @ [Label lbl]
+        ) cases caseLabels
+      cExpr e varEnv funEnv @ List.concat caseBody @ [INCSP -1]
 
 
 (* Generate code to access variable, dereference pointer or index array.
