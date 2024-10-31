@@ -54,6 +54,8 @@ rule Token = parse
   | '+'             { PLUS } 
   | "++"            { PREINC }
   | "--"            { PREDEC }
+  | "?"             { TERNARY } (* Exercise 8.5 *)
+  | ":"             { COLON } (* Exercise 8.5 *)
   | '-'             { MINUS } 
   | '*'             { TIMES } 
   | '/'             { DIV } 

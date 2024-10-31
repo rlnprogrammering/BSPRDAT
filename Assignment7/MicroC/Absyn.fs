@@ -25,6 +25,7 @@ and expr =
   | Call of string * expr list       (* Function call f(...)        *)
   | PreInc of access                 (* C/C++/Java/C# ++i or ++a[e] *)
   | PreDec of access                 (* C/C++/Java/C# --i or --a[e] *)
+  | Ternary of expr * expr * expr    (* Ternary expr - Exercise 8.5 *)
                                                                    
 and access =                                                       
   | AccVar of string                 (* Variable access        x    *) 
