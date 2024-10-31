@@ -3,6 +3,6 @@ void main() {
     int y; y = 4;
     int res;
     
-    res = y > i ? y : i;
+    res = (y > i) ? y : i;
     print res;
 }

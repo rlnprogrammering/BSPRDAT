@@ -338,13 +338,24 @@ cpar.fsy
 ex85
 
 ```bash
-[LDARGS; CALL (0, "L1"); STOP; Label "L1"; INCSP 1; GETBP; CSTI 0; ADD;
-   CSTI 1; STI; INCSP -1; INCSP 1; GETBP; CSTI 1; ADD; CSTI 4; STI; INCSP -1;
-   INCSP 1; GETBP; CSTI 2; ADD; GETBP; CSTI 1; ADD; LDI; GETBP; CSTI 0; ADD;
-   LDI; IFZERO "L2"; GETBP; CSTI 1; ADD; LDI; GOTO "L3"; Label "L2"; GETBP;
-   CSTI 0; ADD; LDI; Label "L3"; SWAP; LT; STI; INCSP -1; GETBP; CSTI 2; ADD;
-   LDI; PRINTI; INCSP -1; INCSP -3; RET -1]
+[LDARGS; CALL (0, "L1"); STOP; Label "L1"; 
+INCSP 1; GETBP; CSTI 0; ADD; CSTI 1; STI; INCSP -1;                           # int i; i = 1;
+INCSP 1; GETBP; CSTI 1; ADD; CSTI 4; STI; INCSP -1;                           # int y; y = 4;
+INCSP 1; GETBP; CSTI 2; ADD;                                                  # int res;
+GETBP; CSTI 1; ADD; LDI; GETBP; CSTI 0; ADD; LDI; SWAP; LT; IFZERO "L2";      # i < y
+GETBP; CSTI 1; ADD; LDI;                                                      # push value of y to stack
+GOTO "L3";                                                                    # (jump to L3)
+
+Label "L2";
+GETBP; CSTI 0; ADD; LDI;                                                      # push value of i to stack
+   
+Label "L3"; 
+STI; INCSP -1;                                                                # (store top of stack as res)
+GETBP; CSTI 2; ADD; LDI; PRINTI; INCSP -1;                                    # print res;
+INCSP -3; RET -1]
+
 ```
+
 
 
 ## Exercise 8.6:
