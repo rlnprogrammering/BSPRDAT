@@ -1,15 +1,18 @@
+# Assignment 7
 Hello TA :D
 
 
-**Exercise 8.1:**
-(i) Udført ved at følge instruks B i denne README.
+## Exercise 8.1:
+**(i)** Udført ved at følge instruks B i denne README.
 
-(ii) Write up the bytecode in a more structured way with labels only at the beginning of the line (as in this chapter):
-** ex3 **
+**(ii) Write up the bytecode in a more structured way with labels only at the beginning of the line (as in this chapter):**
+**ex3**
+
 Kør:
-   open ParseAndComp;;
-   compileToFile (fromFile "ex3.c") "ex3.out";; 
-
+```
+open ParseAndComp;;
+compileToFile (fromFile "ex3.c") "ex3.out";; 
+```
 
 Write up bytecode in more structured way:
 ```bash
@@ -122,6 +125,7 @@ Prøve gennemgang af stacken for ex3.c hvor n=1:
 [n] - stop
 ```
 **ex5** 
+
 Kør:
    open ParseAndComp;;
    compileToFile (fromFile "ex5.c") "ex5.out";; 
@@ -141,7 +145,7 @@ GETBP; CSTI 1; ADD; LDI; GETBP; CSTI 0; ADD; LDI; GETBP; CSTI 0; ADD; LDI; MUL; 
 RET 1;                                                               -> }
 ```
 
-## Stacktrace:
+**Stacktrace:**
 
 **note:** &<var> (e.g. &bp) is weird notation for the current base pointer to make it more visible that we are working with an address. 
 ```bash
