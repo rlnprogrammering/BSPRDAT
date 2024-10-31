@@ -302,16 +302,29 @@ Ran 0.156 seconds
 
 **Compiling the ex13:**
 ```bash
-[LDARGS; CALL (1, "L1"); STOP; Label "L1"; INCSP 1; GETBP; CSTI 1; ADD;
-   CSTI 1889; STI; INCSP -1; GOTO "L3"; Label "L2"; GETBP; CSTI 1; ADD; GETBP;
-   CSTI 1; ADD; LDI; CSTI 1; ADD; STI; INCSP -1; GETBP; CSTI 1; ADD; LDI;
-   CSTI 4; MOD; CSTI 0; EQ; IFZERO "L7"; GETBP; CSTI 1; ADD; LDI; CSTI 100;
-   MOD; CSTI 0; EQ; NOT; IFNZRO "L9"; GETBP; CSTI 1; ADD; LDI; CSTI 400; MOD;
-   CSTI 0; EQ; GOTO "L8"; Label "L9"; CSTI 1; Label "L8"; GOTO "L6";
-   Label "L7"; CSTI 0; Label "L6"; IFZERO "L4"; GETBP; CSTI 1; ADD; LDI;
-   PRINTI; INCSP -1; GOTO "L5"; Label "L4"; INCSP 0; Label "L5"; INCSP 0;
-   Label "L3"; GETBP; CSTI 1; ADD; LDI; GETBP; CSTI 0; ADD; LDI; LT;
-   IFNZRO "L2"; INCSP -1; RET 0]
+[LDARGS; CALL (1, "L1"); STOP; Label "L1";    # void main(int n) {
+INCSP 1;                                      # int y;
+GETBP; CSTI 1; ADD; CSTI 1889; STI; INCSP -1; # y = 1889
+GOTO "L3"; 
+
+Label "L2";                                                              # (block inside while loop)
+GETBP; CSTI 1; ADD; GETBP; CSTI 1; ADD; LDI; CSTI 1; ADD; STI; INCSP -1; # y = y + 1;
+GETBP; CSTI 1; ADD; LDI; CSTI 4; MOD; CSTI 0; EQ; IFZERO "L7";           # y % 4 == 0 (Check1: if fails go to L7, otherwise continues)
+GETBP; CSTI 1; ADD; LDI; CSTI 100; MOD; CSTI 0; EQ; NOT; IFNZRO "L9";    # y % 100 != 0 (Check2: if success go to L9)
+GETBP; CSTI 1; ADD; LDI; CSTI 400; MOD; CSTI 0; EQ; GOTO "L8";           # y % 400 == 0 (Check3: goto L8 no matter what)
+
+Label "L9"; CSTI 1;     # called if check1 = true AND check2 = true, pushes 1 on stack
+Label "L8"; GOTO "L6";  # if first and second condition passes (the line right above) we goto L6 with *1* on top of stack. If check1 = true AND check2 = false, we goto L6 with outcome of EQ in check3 check on top of stack (0 if check3 = false, 1 if check3 = true).
+Label "L7"; CSTI 0;     # called if check1 = false, pushes 0 on stack.
+
+Label "L6"; IFZERO "L4"; # if 0 jump if 1 continue inside if-statement
+GETBP; CSTI 1; ADD; LDI; PRINTI; INCSP -1; # print y; (inside of if statement)
+GOTO "L5"; 
+
+Label "L4"; INCSP 0; 
+Label "L5"; INCSP 0;
+Label "L3"; GETBP; CSTI 1; ADD; LDI; GETBP; CSTI 0; ADD; LDI; LT; IFNZRO "L2";  # y < n (if true, then jump to block inside while loop)
+INCSP -1; RET 0] # }
 ```
 Looking at the symbolic bytecode, we can tell that it uses a lot of `GOTO` for loops and `IFZERO` and `IFNZRO` for conditionals.
 
