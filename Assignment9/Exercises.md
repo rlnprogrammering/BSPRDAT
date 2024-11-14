@@ -58,6 +58,14 @@ abstract machine (also called the mutator) and the garbage collector?
 # Exercise 10.2
 Add a simple mark-sweep garbage collector to listmachine.c.
 
+**Note:** Listmachine working directory we have run the code from:
+
+`Assignment9/ListC/ListVM/ListVM`
+
+How to run from this directory:
+
+`$ ./listmachine ../../ex35.out`
+
 Code:
 
 ```c
@@ -93,3 +101,7 @@ void sweepPhase() {
     
 
 # Exercise 10.3
+We spent many hours on this exercise without any breakthrough. PLEASE HELP
+
+What is supposed to be the correct solution? 
+We had trouble accessing the previous Header, and how to merge it into one block...
