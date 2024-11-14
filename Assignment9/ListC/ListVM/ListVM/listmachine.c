@@ -473,9 +473,9 @@ void initheap() {
 void markPhase(word s[], word sp) {
   printf("marking ...\n");
   for (word i = 0; i < sp; i++) {
-    word element = s[i];
-    element = mkheader(0, 2, Black); // TODO length ikke hardcoded til 2?
-    printf("Stack element %ld: %ld\n", i, element);
+    word* element = &s[i];
+    Paint(element[0], Black); // Maybe?
+    // printf("Stack element %lld: %ld\n", i, element);
   }
 }
 
@@ -483,18 +483,18 @@ void sweepPhase() {
   printf("sweeping ...\n");
   word* current = heap;
   word** prevH = &heap;
-  while (current != 0) {
+  while (current != NULL) {
     if (Color(current[0]) == White) {
         // Add to freelist
-        *prevH = current[1];    // Link the previous block to the next block
-        current[1] = freelist;  // Link the current block to the freelist
+        prevH = (word**)&current[1];    // Link the previous block to the next block
+        current[1] = (word)freelist;  // Link the current block to the freelist
         freelist = current;     // Update the freelist to point to the current block
     } else if (Color(current[0]) == Black) {
         // Recolor to white
-        current[0] = MakeWhite(current[0]);
-        prevH = &current[1];  // Move to the next block
+        Paint(current[0], White);
+        prevH = (word**)&current[1];  // Move to the next block
     }
-    current = current[1];     // Move to the next block
+    current = (word*)*prevH;     // Move to the next block
   }
 }
 
@@ -505,10 +505,11 @@ void collect(word s[], word sp) {
   heapStatistics();
 }
 
-void collect(int s[], int sp) {
-  markPhase(s, sp);
-  sweepPhase();
-}
+//No statistics
+// void collect(word s[], word sp) { 
+//   markPhase(s, sp);
+//   sweepPhase();
+// }
 
 word* allocate(unsigned int tag, uword length, word s[], word sp) {
   int attempt = 1;
