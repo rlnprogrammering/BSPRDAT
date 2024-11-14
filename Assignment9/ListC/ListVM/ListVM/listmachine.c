@@ -474,8 +474,7 @@ void markPhase(word s[], word sp) {
   printf("marking ...\n");
   for (word i = 0; i < sp; i++) {
     word* element = &s[i];
-    Paint(element[0], Black); // Maybe?
-    // printf("Stack element %lld: %ld\n", i, element);
+    Paint(element[0], Black);
   }
 }
 
@@ -485,20 +484,17 @@ void sweepPhase() {
   word** prevH = &heap;
   while (current != NULL) {
     if (Color(current[0]) == White) {
-        // Add to freelist
-        prevH = (word**)&current[1];    // Link the previous block to the next block
-        current[1] = (word)freelist;  // Link the current block to the freelist
-        freelist = current;     // Update the freelist to point to the current block
+      current[1] = (word)freelist;  // Link the current block to the freelist
+      freelist = current;           // Update the freelist to point to the current block
     } else if (Color(current[0]) == Black) {
-        // Recolor to white
-        Paint(current[0], White);
-        prevH = (word**)&current[1];  // Move to the next block
+      Paint(current[0], White);     // Recolor to white
     }
-    current = (word*)*prevH;     // Move to the next block
+    prevH = (word**)&current[1]; 
+    current = (word*)*prevH;        // Move to the next block
   }
 }
 
-void collect(word s[], word sp) {
+// void collect(word s[], word sp) {
   markPhase(s, sp);
   heapStatistics();
   sweepPhase();

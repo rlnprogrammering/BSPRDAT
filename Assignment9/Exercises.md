@@ -58,6 +58,38 @@ abstract machine (also called the mutator) and the garbage collector?
 # Exercise 10.2
 Add a simple mark-sweep garbage collector to listmachine.c.
 
+Code:
+
+```c
+void markPhase(word s[], word sp) {
+  printf("marking ...\n");
+  for (word i = 0; i < sp; i++) {
+    word* element = &s[i];
+    Paint(element[0], Black); // Maybe?
+    // printf("Stack element %lld: %ld\n", i, element);
+  }
+}
+
+void sweepPhase() {
+  printf("sweeping ...\n");
+  word* current = heap;
+  word** prevH = &heap;
+  while (current != NULL) {
+    if (Color(current[0]) == White) {
+        // Add to freelist
+        prevH = (word**)&current[1];    // Link the previous block to the next block
+        current[1] = (word)freelist;  // Link the current block to the freelist
+        freelist = current;     // Update the freelist to point to the current block
+    } else if (Color(current[0]) == Black) {
+        // Recolor to white
+        Paint(current[0], White);
+        prevH = (word**)&current[1];  // Move to the next block
+    }
+    current = (word*)*prevH;     // Move to the next block
+  }
+}
+```
+
     
 
 # Exercise 10.3
