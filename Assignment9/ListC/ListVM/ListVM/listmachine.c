@@ -487,6 +487,11 @@ void collect(word s[], word sp) {
   heapStatistics();
 }
 
+void collect(int s[], int sp) {
+  markPhase(s, sp);
+  sweepPhase();
+}
+
 word* allocate(unsigned int tag, uword length, word s[], word sp) {
   int attempt = 1;
   do {
