@@ -494,7 +494,7 @@ void sweepPhase() {
   }
 }
 
-// void collect(word s[], word sp) {
+void collect(word s[], word sp) {
   markPhase(s, sp);
   heapStatistics();
   sweepPhase();
