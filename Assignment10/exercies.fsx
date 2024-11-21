@@ -37,3 +37,13 @@ let rec revc xs c =
     match xs with
     | [] -> c []
     | x::xr -> revc xr (fun r -> c (r @ [x]));;
+
+
+// (ii)
+(* 
+    > revc [1;2;3;4;5;6] (fun v -> v);;
+    val it: int list = [6; 5; 4; 3; 2; 1]
+
+    > revc [1;2;3;4;5;6] (fun v -> v @ v);;
+    val it: int list = [6; 5; 4; 3; 2; 1; 6; 5; 4; 3; 2; 1]
+*)
