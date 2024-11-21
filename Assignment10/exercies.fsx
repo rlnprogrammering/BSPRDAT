@@ -81,8 +81,24 @@ let rec prodi xs acc =
     > run (Every(Write(Prim("*", CstI 2, FromTo(1, 4)))));;
     2 4 6 8 val it: value = Int 0
 *)
+
 // (i)
 // run (Every(Write(Prim("+", CstI 1, Prim("*", CstI 2, FromTo(1, 4))))));;
 // run (Every(Write(Prim("+", Prim("*", CstI 10, FromTo(2, 4)), FromTo(1, 2)))));;
+
 // (ii)
-// run (Write(Prim("<", CstI 50, Prim("*", CstI 7, FromTo(2, 10)))));;
+// run (Write(Prim("<", CstI 50, Prim("*", CstI 7, FromTo(0, 100)))));;
+
+// (iii)
+// look in Icon.fs
+(*
+    > run (Every(Write(Prim1("sqr", FromTo(1, 5)))));;
+    1 4 9 16 25 val it: value = Int 0
+
+    > run (Every(Write(Prim1("even", FromTo(1, 10)))));;
+    2 4 6 8 10 val it: value = Int 0
+*)
+
+// (iv)
+// look in Icon.fs
+// run (Every(Write(Prim1("multiples", FromTo(3, 4)))));;

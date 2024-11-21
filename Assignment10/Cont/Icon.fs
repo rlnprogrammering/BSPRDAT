@@ -31,6 +31,7 @@ type expr =
   | Write of expr
   | If of expr * expr * expr
   | Prim of string * expr * expr 
+  | Prim1 of string * expr
   | And of expr * expr
   | Or  of expr * expr
   | Seq of expr * expr
@@ -72,6 +73,22 @@ let rec eval (e : expr) (cont : cont) (econt : econt) =
     | If(e1, e2, e3) -> 
       eval e1 (fun _ -> fun _ -> eval e2 cont econt)
               (fun () -> eval e3 cont econt)
+    | Prim1(ope, e) -> 
+      eval e (fun v1 econt1 ->
+          match (ope, v1) with
+          | ("sqr", Int i1) -> 
+              cont (Int(i1 * i1)) econt1 
+          | ("multiples", Int i1) -> 
+            let rec loop i = 
+                cont (Int (i*i1)) (fun () -> loop (i+1))
+            loop 1
+          | ("even", Int i1) -> 
+              if i1 % 2 = 0 then 
+                  cont (Int i1) econt1
+              else
+                  econt1 ()
+          | _ -> econt1 ()
+      ) econt
     | Prim(ope, e1, e2) -> 
       eval e1 (fun v1 -> fun econt1 ->
           eval e2 (fun v2 -> fun econt2 -> 
