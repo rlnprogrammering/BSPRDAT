@@ -54,8 +54,8 @@ let rec revi xs acc =
     | [] -> acc
     | x::xr -> revi xr (x::acc);;
 
-(* Exercise 11.3 *)
 
+(* Exercise 11.3 *)
 let rec prod xs =
     match xs with
     | [] -> 1
@@ -66,19 +66,23 @@ let rec prodc xs c =
     | [] -> c 1
     | x::xr -> if x=0 then 0 else prodc xr (fun r -> c (x * r));;
 
+
 (* Exercise 11.4 *)
 let rec prodi xs acc =
     match xs with
     | [] -> acc
     | x::xr -> if x=0 then 0 else prodi xr (x * acc);;
 
+
 (* Exercise 11.8 *)
-// dotnet fsi Icon.fs
-// > open Icon;;
-// > run (Every(Write(Prim("*", CstI 2, FromTo(1, 4)))));;
-// 2 4 6 8 val it: value = Int 0
+(*
+    dotnet fsi Icon.fs
+    > open Icon;;
+    > run (Every(Write(Prim("*", CstI 2, FromTo(1, 4)))));;
+    2 4 6 8 val it: value = Int 0
+*)
 // (i)
 // run (Every(Write(Prim("+", CstI 1, Prim("*", CstI 2, FromTo(1, 4))))));;
 // run (Every(Write(Prim("+", Prim("*", CstI 10, FromTo(2, 4)), FromTo(1, 2)))));;
 // (ii)
-// run Write(Prim("<", CstI 50, Prim("*", CstI 7, FromTo(2, 10))));;
+// run (Write(Prim("<", CstI 50, Prim("*", CstI 7, FromTo(2, 10)))));;
