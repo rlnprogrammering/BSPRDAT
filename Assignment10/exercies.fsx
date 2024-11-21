@@ -64,4 +64,12 @@ let rec prod xs =
 let rec prodc xs c =
     match xs with
     | [] -> c 1
-    | x::xr -> prodc xr (fun r -> c (x * r));;
+    | x::xr -> if x=0 then 0 else prodc xr (fun r -> c (x * r));;
+
+(* Exercise 11.4 *)
+let rec prodi xs acc =
+    match xs with
+    | [] -> acc
+    | x::xr -> if x=0 then 0 else prodi xr (x * acc);;
+
+(* Exercise 11.8 *)
