@@ -73,3 +73,7 @@ let rec prodi xs acc =
     | x::xr -> if x=0 then 0 else prodi xr (x * acc);;
 
 (* Exercise 11.8 *)
+// dotnet fsi Icon.fs
+// > open Icon;;
+// > run (Every(Write(Prim("*", CstI 2, FromTo(1, 4)))));;
+// 2 4 6 8 val it: value = Int 0
