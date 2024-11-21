@@ -77,3 +77,6 @@ let rec prodi xs acc =
 // > open Icon;;
 // > run (Every(Write(Prim("*", CstI 2, FromTo(1, 4)))));;
 // 2 4 6 8 val it: value = Int 0
+// (i)
+// run (Every(Write(Prim("+", CstI 1, Prim("*", CstI 2, FromTo(1, 4))))));;
+// run (Every(Write(Prim("+", Prim("*", CstI 10, FromTo(2, 4)), FromTo(1, 2)))));;
