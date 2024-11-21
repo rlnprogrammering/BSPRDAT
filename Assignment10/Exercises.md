@@ -1,11 +1,9 @@
 # 11.1
-(i)
 
-(ii)
-
-(iii)
+(i)(ii)(iii) see exercises.fsx
 
 # 11.2
+
 (i)
 
 (ii)
