@@ -47,3 +47,21 @@ let rec revc xs c =
     > revc [1;2;3;4;5;6] (fun v -> v @ v);;
     val it: int list = [6; 5; 4; 3; 2; 1; 6; 5; 4; 3; 2; 1]
 *)
+
+// (iii)
+let rec revi xs acc =
+    match xs with
+    | [] -> acc
+    | x::xr -> revi xr (x::acc);;
+
+(* Exercise 11.3 *)
+
+let rec prod xs =
+    match xs with
+    | [] -> 1
+    | x::xr -> x * prod xr;;
+
+let rec prodc xs c =
+    match xs with
+    | [] -> c 1
+    | x::xr -> prodc xr (fun r -> c (x * r));;
